@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}HackerRank - Administration{% endblock %}
+{% block body %}
+	<style type="text/css">
+		.sub-nav-item {
+			padding: 10px;
+			background-color: white;
+			color: black;
+		}
+		.sub-nav {
+			background-color: #ccc;
+			border: 1px solid #929eaa;
+		}
+		#content {
+			padding: 20px;
+			border: 1px solid #929eaa;
+		}
+		.btn {
+			border-radius: 0px !important;
+		}
+		.tests_ul {
+			list-style-type: none;
+		}
+		.tests_ul li {
+			list-style-type: none;
+		}
+		td.dataTables_empty {
+			content: "You havent created any tests yet."
+		}
+	</style>
+
+	<h2>Administration</h2><br>
+	<ul class="nav sub-nav">
+	  <li class="nav-item sub-nav-item">
+	    <a class="nav-link active" href="/admin">Manage Tests</a>
+	  </li>
+	</ul>
+	<div style="padding: 10px;">
+		<a href="/create_test" class="btn btn-success float-right">Create Test</a>
+	</div><br><br>
+	<div id="content">
+		<table id="tests" class="display" width="100%"></table>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var jqxhr = $.post( "/load_tests", function(res) {
+				tests = JSON.parse(res)
+			    $('#tests').DataTable( {
+			        data: tests,
+			        columns: [
+			            { title: "Name" },
+			            { title: "No. of Questions" },
+			            { title: "Start date" },
+			            { title: "End date" },
+			            { title: "Duration" }
+			        ],
+					retrieve: true,
+			        paging: false
+			    });
+			})
+			.fail(function() {
+				$("#content").html( "<p class='float-center'>Error in fetching the data.</p>" );
+			})
+		});
+	</script>
+{% endblock%}

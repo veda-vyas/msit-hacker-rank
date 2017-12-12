@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}HackerRank - Create Test{% endblock %}
+{% block body %}
+	{% if valid %}
+		<div class="alert alert-success" role="alert">
+		  {{message}}
+		</div>
+	{% elif message %}
+		<div class="alert alert-danger" role="alert">
+		  {{message}}
+		</div>
+	{% endif %}
+	<nav aria-label="breadcrumb" role="navigation">
+	  <ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="/admin">Manage Tests</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">Create Test</li>
+	  </ol>
+	</nav><hr>
+	<h2 class="col-md-12">Create Test</h2><br>
+	<form action="/create_test" method="POST" class="col-md-6">
+		<div class="form-group">
+			<label for="name">Name of the Test</label>
+			<input type="text" class="form-control" id="name" name="name" placeholder="Enter name of the Test">
+			<!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+		</div>
+		<div class="form-group">
+			<label for="no_of_questions">Number of Questions</label>
+			<input type="number" class="form-control" id="no_of_questions" name="no_of_questions" placeholder="Enter number of Questions">
+		</div>
+		<div class="form-group">
+			<label for="duration">Test Duration</label>
+			<input type="number" class="form-control" id="duration" name="duration" placeholder="Enter duration of exam (in mins.)">
+		</div>
+		<div class="form-check">
+			<label class="form-check-label">
+				<input type="checkbox" class="form-check-input">
+				Host Today
+			</label>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+{% endblock%}

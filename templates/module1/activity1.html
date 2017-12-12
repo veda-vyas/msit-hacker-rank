@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% block title %}CSPP - Assignment 1{% endblock %}
+<style type="text/css" media="screen">
+    #editor { 
+        width: 500px;
+        height: 400px;
+    }
+</style>
+{% block body %}
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row" id="main" >
+                <div class="col-sm-12 col-md-6" id="content">
+					<div>
+						<div>
+							<h3 id="form-title">Problem 1</h3>
+							<hr>
+						</div>
+						<div>
+							<div>
+								<p id="form-description">Assume s is a string of lower case characters.</p>
+								<p>Write a program that counts up the number of vowels contained in the string s. Valid vowels are: 'a', 'e', 'i', 'o', and 'u'. For example, if s = 'azcbobobegghakl', your program should print:</p>
+								<pre>Number of vowels: 5</pre>
+								</p>
+							</div>
+							<hr>
+						</div>
+					</div>
+					<div class="text-right">
+						<a id="nextactivity" href="/activity/1/2" class="btn btn-default btn-lg hidden">Activity 2</a>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-6"><br>
+					<form action="/submitactivity/1/1" method="POST">
+					  	<div id="status"></div>
+					  	<div id="1.1.1 editor" style="height: 450px; width: 500px;">{{questions['1.1.1 editor']}}</div>
+					  	<textarea name="1.1.1 editor" style="display: none;"></textarea>
+						<div class="panel panel-success" style="width: 500px; padding: 5px;">
+						  	<a href="#" id="showoutput" class="text-right">
+						  		show output
+						  	</a>
+						  	<pre id="output" class="hidden"></pre>
+						</div>
+						<div class="">
+							  <div class="col-md-6 text-left">
+							  	<button id="testrun" class="btn btn-default">Test Run</button>
+							  </div>
+							  <div class="col-md-6 text-right">
+							  	<button type="submit" class="btn btn-success">Submit as Solution</button>
+							  </div>
+						</div>
+					</form>  
+				</div>
+			</div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/scripts/skulpt.min.js" type="text/javascript"></script> 
+	<script src="/scripts/skulpt-stdlib.js" type="text/javascript"></script> 
+	<script>
+
+		$("#showoutput").click(function(){
+			$(this).text('show output');
+			$("#output").removeClass("hidden");
+		})
+
+		// instantiate code mirror editor on a textarea
+	    var editor = ace.edit("1.1.1 editor");
+	    editor.setTheme("ace/theme/monokai");
+	    editor.getSession().setMode("ace/mode/python");
+	    editor.setOptions({
+	    	fontSize: "12pt"
+	    })
+	    var textarea = $('textarea[name="1.1.1 editor"]');
+		textarea.val(editor.getSession().getValue());
+		editor.getSession().on("change", function () {
+		    textarea.val(editor.getSession().getValue());
+		});
+
+		// An octopus model to contain TC's with getter and setter methods
+		var testcases = {
+			init: function(){
+				this.tcs = {
+					"testcase1":{input:["pirpnhj"],output:["Number of vowels: 1"]},
+					"testcase2":{input:["xyoxotaaloozyimjxduseo"],output:["Number of vowels: 10"]},
+					"testcase3":{input:["oqoeeqlawjuteaogx"],output:["Number of vowels: 9"]},
+					"testcase4":{input:["jhcuagees"],output:["Number of vowels: 4"]},
+					"testcase5":{input:["ojuaaovmctootichurjeio"],output:["Number of vowels: 12"]},
+					"testcase6":{input:["irdlafrbtjxnibaoiv"],output:["Number of vowels: 6"]},
+					"testcase7":{input:["xnkhaq"],output:["Number of vowels: 1"]},
+					"testcase8":{input:["avrojiiyou"],output:["Number of vowels: 6"]},
+					"testcase9":{input:["dltzndjoccnuusosovmywpxh"],output:["Number of vowels: 5"]},
+					"testcase10":{input:["cpimijij"],output:["Number of vowels: 3"]},
+					"testcase11":{input:["demhuflrsttlzmnrunjuo"],output:["Number of vowels: 5"]},
+					"testcase12":{input:["evdoene"],output:["Number of vowels: 4"]},
+					"testcase13":{input:["ivclmede"],output:["Number of vowels: 3"]},
+					"testcase14":{input:["kouariocuirigpuuivvn"],output:["Number of vowels: 11"]},
+					"testcase15":{input:["fhlevlyobveqbrp"],output:["Number of vowels: 3"]},
+					"testcase16":{input:["ajavbcpqnojjcsuhagnwpi"],output:["Number of vowels: 6"]},
+					"testcase17":{input:["whlachpkztoasyhraeqguiyf"],output:["Number of vowels: 7"]},
+					"testcase18":{input:["bnseawmpfnenrl"],output:["Number of vowels: 3"]},
+					"testcase19":{input:["wncgvlkyvhftevicbht"],output:["Number of vowels: 2"]},
+					"testcase20":{input:["yioxnviykh"],output:["Number of vowels: 3"]},
+				}
+				this.testcase = this.tcs["testcase1"]
+				this.count = Object.keys(this.tcs).length
+			},
+			getTestCase: function(){
+				return this.testcase
+			},
+			setTestCase: function(tc){
+				this.testcase = this.tcs[tc];
+			},
+			countTestCases: function(){
+				return this.count;
+			}
+		}
+
+		// A handler to recursively run a code-execution function :runit(): for all testcases.
+    	var tc = 1;
+		var runTcs = function(no_of_tc) {
+    		testcases.setTestCase("testcase"+(tc))
+		    runit(testcases.getTestCase(),function(){
+		        tc++;
+		        if(tc <= no_of_tc) {
+		            runTcs(no_of_tc);  
+		        }
+		    }); 
+		}
+	    
+	    // A click handler to detect 'Test Run' button click and start the :runTcs(): Handler
+	    $("#testrun").click(function(e){
+	    	e.preventDefault();
+	    	testcases.init();
+	    	no_of_tc = testcases.countTestCases();
+	    	var mypre = document.getElementById("output");
+	    	mypre.innerHTML = '';
+	    	runTcs(no_of_tc);
+		})
+		
+		// A function that uses Skulpt (http://skulpt.org) to convert python code to JS and execute it in browser.
+		// It accepts a callback function to report back after every testcase execution 
+		function runit(testcase, callback) {
+		   var prog = editor.getSession().getValue(); 
+		   var mypre = document.getElementById("output"); 
+		   Sk.pre = "output";
+		   
+		   // Configure Skulpt instance to handle input and output actions
+		   // Input returns a promise, representing the status.
+		   Sk.configure({
+				inputfun: function(prompt){
+					testcases.init()
+					input = testcase.input;
+				    return new Promise((resolve, reject) => {
+				        let inputLines = input[0];
+		        		resolve(inputLines);
+				    });
+				},
+				output: function(text){
+					testcases.init()
+					input = testcase.input;
+					output = testcase.output;
+					if (text.replace(/\n/g, "") !== "") {
+					    if (text == output){
+					    	var mypre = document.getElementById("output");
+					    	mypre.innerHTML += "<b style='color:green'>Testcase Passed</b>";
+					    	mypre.innerHTML += "\nInput: "+input[0];
+					   	    mypre.innerHTML += "\nExpected: "+output[0];
+					    	mypre.innerHTML += "\nGot: "+text+"\n\n";
+					    }else{
+					    	var mypre = document.getElementById("output");
+					    	mypre.innerHTML += "<b style='color:red'>Testcase Failed</b>";
+					    	mypre.innerHTML += "\nInput: "+input[0];
+					    	mypre.innerHTML += "\nExpected: "+output[0];
+					    	mypre.innerHTML += "\nGot: "+text+"\n\n";
+					    }
+					}
+				}, 
+				read: function(x){
+					if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+				    	throw "File not found: '" + x + "'";
+				    return Sk.builtinFiles["files"][x];
+				}
+			}); 
+
+		   	// Above promise is used to synchronously run the program with given input
+		    var myPromise = Sk.misceval.asyncToPromise(function() {
+		   		try {
+		   			op = Sk.importMainWithBody("<stdin>", false, prog, true);
+		   		}
+		   		catch(e){
+		   			op = e
+		   			mypre.innerHTML += e.toString()
+		   		}
+		   		return op
+		   });
+		   myPromise.then(function(mod) {
+		       $("#showoutput").click();
+		       callback();
+		   },
+		   function(err) {
+		        sErr = err.toString(); 
+				var mypre = document.getElementById("output");
+				mypre.innerHTML = sErr;
+		        $("#showoutput").click();
+		   });
+
+		}
+	</script>
+
+	{% for key, value in questions.iteritems() %}
+    <script type="text/javascript">
+    	if("{{key}}" == "editor"){
+			editor.setValue('{{value | replace("\n", "\\n")}}');
+    	}
+    </script>
+    {%endfor%}
+{% endblock %}
