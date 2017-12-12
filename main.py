@@ -85,6 +85,7 @@ class User(db.Model, UserMixin):
 class Test(db.Model):
     __tablename__ = "test"
     id = db.Column(db.Integer, primary_key=True)
+    identity = db.Column(db.String(10), unique=True)
     name = db.Column(db.Text)
     no_of_questions = db.Column(db.Integer)
     start = db.Column(db.DateTime, default=datetime.now(IST))
@@ -154,7 +155,7 @@ def load_tests():
         tests_arr = []
         for test in tests:
             tests_arr.append([
-                test.name, test.no_of_questions, test.start.strftime("%d-%m-%Y %H:%M"), test.end.strftime("%d-%m-%Y %H:%M"), test.duration 
+                "<a href='/edit_test/"+test.identity+"'>"+test.identity+"</a>", test.name, test.no_of_questions, test.start.strftime("%d-%m-%Y %H:%M"), test.end.strftime("%d-%m-%Y %H:%M"), test.duration 
             ])
         return json.dumps(tests_arr)
     except Exception as e:
@@ -174,17 +175,33 @@ def create_test():
         try:
             f = request.form
             name = f["name"]
+            id = f["id"]
             no_of_questions = f["no_of_questions"]
             duration = f["duration"]
+            tests = Test.query.filter(Test.identity==id).all()
+            if len(tests) == 0:
+                new_test = Test(identity=id,name=name,no_of_questions=no_of_questions,duration=duration)
+                db.session.add(new_test)
+                db.session.commit()
+                message = "Successfully created the test."
+                valid = True
+            else:
+                message = "Test ID already exists. Please choose another."
+                valid = False
 
-            new_test = Test(name=name,no_of_questions=no_of_questions,duration=duration)
-            db.session.add(new_test)
-            db.session.commit()
-
-            return render_template("create_test.html", message="Successfully created the test.", valid=True)
+            return render_template("create_test.html", message=message, valid=valid)
         except Exception as e:
             app.logger.info("Error in create_test: "+str(e))
             return render_template('create_test.html', message=str(e), valid=False)
+
+@app.route('/edit_test/testid', methods=['GET'])
+@admin_login_required
+def edit_test(testid=None):
+    if testid == None:
+        app.logger.info("requested edit_test without TestID: "+str(e))
+        return redrect('/')
+    else:
+        return render_template("edit_test.html")
 
 @app.route('/login')
 def login():

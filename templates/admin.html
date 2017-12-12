@@ -3,7 +3,7 @@
 {% block body %}
 	<style type="text/css">
 		.sub-nav-item {
-			padding: 10px;
+			padding: 5px;
 			background-color: white;
 			color: black;
 		}
@@ -12,7 +12,7 @@
 			border: 1px solid #929eaa;
 		}
 		#content {
-			padding: 20px;
+			padding: 10px;
 			border: 1px solid #929eaa;
 		}
 		.btn {
@@ -49,6 +49,7 @@
 			    $('#tests').DataTable( {
 			        data: tests,
 			        columns: [
+			            { title: "Test ID" },
 			            { title: "Name" },
 			            { title: "No. of Questions" },
 			            { title: "Start date" },
