@@ -1,4 +1,4 @@
-# ADS-Module-Page
+# msit-hacker-rank
 
 ## To Run the project clone this repository and open a terminal and run the following
 ```
