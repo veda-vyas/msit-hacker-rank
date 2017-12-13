@@ -85,12 +85,12 @@ class User(db.Model, UserMixin):
 class Test(db.Model):
     __tablename__ = "test"
     id = db.Column(db.Integer, primary_key=True)
-    identity = db.Column(db.String(10), unique=True)
+    identity = db.Column(db.String(5), unique=True)
     name = db.Column(db.Text)
     no_of_questions = db.Column(db.Integer)
     start = db.Column(db.DateTime, default=datetime.now(IST))
     end = db.Column(db.DateTime, default=datetime.now(IST))
-    duration = db.Column(db.Integer)
+    duration = db.Column(db.Integer, default=120)
     description = db.Column(db.Text, default="")
     instructions = db.Column(db.Text, default="")
     grading = db.Column(db.Text, default="")
@@ -176,32 +176,54 @@ def create_test():
             f = request.form
             name = f["name"]
             id = f["id"]
+            start = datetime.strptime(f["start"], "%d-%m-%Y %H:%M")
+            end = datetime.strptime(f["end"], "%d-%m-%Y %H:%M")
             no_of_questions = f["no_of_questions"]
             duration = f["duration"]
             tests = Test.query.filter(Test.identity==id).all()
             if len(tests) == 0:
-                new_test = Test(identity=id,name=name,no_of_questions=no_of_questions,duration=duration)
-                db.session.add(new_test)
-                db.session.commit()
-                message = "Successfully created the test."
-                valid = True
+                if len(id) <= 5:
+                    new_test = Test(identity=id,name=name,no_of_questions=no_of_questions,start=start,end=end,duration=duration)
+                    db.session.add(new_test)
+                    db.session.commit()
+                    message = "Successfully created the test."
+                    valid = True
+                    return redirect(url_for("admin"))
+                else:
+                    message = "Please choose a TestID which is <=5 characters"
+                    valid = False    
+                    return redirect(url_for("create_test", message=message, valid=valid))
             else:
-                message = "Test ID already exists. Please choose another."
-                valid = False
+                existing_test = tests[0]
 
-            return render_template("create_test.html", message=message, valid=valid)
+                existing_test.identity = id 
+                existing_test.name = name 
+                existing_test.no_of_questions = no_of_questions 
+                existing_test.start = start 
+                existing_test.end = end 
+                existing_test.duration = duration 
+                db.session.commit()
+                
+                message = "Test ID already exists. Existing Test ("+id+") updated."
+                valid = True
+
+                return redirect(url_for("edit_test", testid=id, message=message, valid=valid))
         except Exception as e:
             app.logger.info("Error in create_test: "+str(e))
-            return render_template('create_test.html', message=str(e), valid=False)
+            return redirect(url_for("create_test", message=str(e), valid=False))
 
-@app.route('/edit_test/testid', methods=['GET'])
+@app.route('/edit_test/<testid>', methods=['GET'])
 @admin_login_required
-def edit_test(testid=None):
+def edit_test(testid=None, message=None, valid=False):
     if testid == None:
         app.logger.info("requested edit_test without TestID: "+str(e))
         return redrect('/')
     else:
-        return render_template("edit_test.html")
+        test = Test.query.filter(Test.identity==testid).first() 
+        if test:
+            return render_template("edit_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid)
+        else:   
+            return redirect(url_for("create_test"))
 
 @app.route('/login')
 def login():

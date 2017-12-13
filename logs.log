@@ -19,3 +19,53 @@ Error in create_test: This Session's transaction has been rolled back due to a p
 DETAIL:  Key (identity)=(demo) already exists.
  'INSERT INTO test (identity, name, no_of_questions, start, "end", duration, description, instructions, grading) VALUES (%(identity)s, %(name)s, %(no_of_questions)s, %(start)s, %(end)s, %(duration)s, %(description)s, %(instructions)s, %(grading)s) RETURNING test.id' {'end': datetime.datetime(2017, 12, 12, 20, 10, 42, 473008, tzinfo=<DstTzInfo 'Asia/Kolkata' IST+5:30:00 STD>), 'description': '', 'grading': '', 'start': datetime.datetime(2017, 12, 12, 20, 10, 42, 472951, tzinfo=<DstTzInfo 'Asia/Kolkata' IST+5:30:00 STD>), 'no_of_questions': u'1', 'duration': u'11', 'instructions': '', 'identity': u'demo', 'name': u'New Demo Test'}
 Error in create_test: global name 'sqlalchemy' is not defined
+vedavyas.yeleswarapu@gmail.com
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:29:34.577890
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:30:54.548868
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:32:07.642239
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:34:38.909494
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:35:57.803110
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:37:35.642640
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:37:54.306597
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:38:11.670830
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:38:17.138004
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:51:11.369261
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:54:34.664408
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:57:51.243345
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 18:57:51.915054
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:43:05.836715
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:43:39.777046
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:43:54.415659
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:45:20.873249
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:48:25.688672
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:51:49.060086
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:52:34.627623
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:53:24.939133
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:54:01.010711
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:54:56.726214
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:55:57.069455
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 19:56:39.988988
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:01:57.342116
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:02:32.612465
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:02:49.288644
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:12:33.361859
+Error in create_test: global name 'duration' is not defined
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:14:01.331511
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:14:41.846869
+Error in create_test: (DataError) value too long for type character varying(10)
+ 'INSERT INTO test (identity, name, no_of_questions, start, "end", duration, description, instructions, grading) VALUES (%(identity)s, %(name)s, %(no_of_questions)s, %(start)s, %(end)s, %(duration)s, %(description)s, %(instructions)s, %(grading)s) RETURNING test.id' {'end': datetime.datetime(2017, 12, 16, 20, 15), 'description': '', 'grading': '', 'name': u'New Demo Test 3', 'start': datetime.datetime(2017, 12, 15, 20, 15), 'no_of_questions': u'3', 'duration': u'120', 'identity': u'anotherdemo', 'instructions': ''}
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:16:46.020038
+Error in create_test: (DataError) value too long for type character varying(10)
+ 'INSERT INTO test (identity, name, no_of_questions, start, "end", duration, description, instructions, grading) VALUES (%(identity)s, %(name)s, %(no_of_questions)s, %(start)s, %(end)s, %(duration)s, %(description)s, %(instructions)s, %(grading)s) RETURNING test.id' {'end': datetime.datetime(2017, 12, 15, 20, 17), 'name': u'New Demo Test', 'grading': '', 'description': '', 'start': datetime.datetime(2017, 12, 14, 20, 17), 'no_of_questions': u'3', 'duration': u'120', 'identity': u'anotherdemo', 'instructions': ''}
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:21:50.591201
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:22:51.605385
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:23:39.708196
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:29:12.110248
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:31:37.826977
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:35:22.815727
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:38:00.539591
+Error in create_test: ('edit_test', {'message': u'Test ID already exists. Existing Test (demo2) updated.', 'valid': True}, None)
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:43:43.705157
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:44:24.665270
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:45:15.111920
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2017-12-13 20:47:31.963213
