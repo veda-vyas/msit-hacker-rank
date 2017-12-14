@@ -95,6 +95,19 @@ class Test(db.Model):
     instructions = db.Column(db.Text, default="")
     grading = db.Column(db.Text, default="")
 
+class Question(db.Model):
+    __tablename__ = "question"
+    id = db.Column(db.Integer, primary_key=True)
+    identity = db.Column(db.String(5), unique=True)
+    testid = db.Column(db.String(5), unique=True)
+    name = db.Column(db.Text)
+    statement = db.Column(db.Text)
+    input_format = db.Column(db.Text)
+    output_format = db.Column(db.Text)
+    constraints = db.Column(db.Text)
+    marks = db.Column(db.Integer)
+    languages = db.Column(db.Text)
+
 class Activity(db.Model):
     __tablename__ = "activity"
     id = db.Column(db.Integer, primary_key=True)
@@ -163,6 +176,27 @@ def load_tests():
     except Exception as e:
         app.logger.info("Error in load_tests: "+str(e))
         return render_template('error.html')
+
+@app.route('/load_questions/<testid>', methods=['POST'])
+@login_required
+@admin_login_required
+def load_questions(testid=None):
+    if testid == None:
+        app.logger.info("requested load_questions without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        try:
+            # tests = Test.query.filter(Test.name=="xyz").all()
+            questions = Question.query.filter(Question.testid==testid).all()
+            questions_arr = []
+            for question in questions:
+                questions_arr.append([
+                    "<a href='/edit_question/"+question.identity+"'>"+question.identity+"</a>", question.name, question.languages, question.marks
+                ])
+            return json.dumps(questions_arr)
+        except Exception as e:
+            app.logger.info("Error in load_questions: "+str(e))
+            return render_template('error.html')
 
 @app.route('/create_test', methods=['GET','POST'])
 @login_required
