@@ -25,6 +25,60 @@
 			list-style-type: none;
 		}
 	</style>
+	<style>  
+	  #toolbar [data-wysihtml-action] {
+	    float: right;
+	  }
+	  
+	  #toolbar,
+	  textarea {
+	    width: 920px;
+	    padding: 5px;
+	    -webkit-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	    -moz-box-sizing: border-box;
+	    box-sizing: border-box;
+	  }
+	  
+	  textarea {
+	    height: 280px;
+	    border: 2px solid green;
+	    font-family: Verdana;
+	    font-size: 11px;
+	  }
+	  
+	  textarea:focus {
+	    color: black;
+	    border: 2px solid black;
+	  }
+	  
+	  .wysihtml-command-active {
+	    font-weight: bold;
+	  }
+	  
+	  [data-wysihtml-dialog] {
+	    margin: 5px 0 0;
+	    padding: 5px;
+	    border: 1px solid #666;
+	  }
+	  
+	  a[data-wysihtml-command-value="red"] {
+	    color: red;
+	  }
+	  
+	  a[data-wysihtml-command-value="green"] {
+	    color: green;
+	  }
+	  
+	  a[data-wysihtml-command-value="blue"] {
+	    color: blue;
+	  }
+	  
+	  div.editable {
+	    border: 1px dashed gray;
+	    padding: 10px;
+	  }
+	</style>
 	<nav aria-label="breadcrumb" role="navigation">
 	  <ol class="breadcrumb">
 	    <li class="breadcrumb-item"><a href="/admin">Manage Tests</a></li>
@@ -58,35 +112,264 @@
 		  {{message}}
 		</div>
 	{% endif %}
-  	<form action="/create_test" method="POST" class="col-md-6">
-		<div class="form-group">
-			<label for="id">Test ID</label>
-			<input type="text" class="form-control" id="id" name="id" value="{{identity}}" required>
+	<div class="row">
+		
+	  	<form action="/create_test" method="POST" class="col-md-6">
+			<div class="form-group">
+				<label for="id">Test ID</label>
+				<input type="text" class="form-control" id="id" name="id" value="{{identity}}" required>
+			</div>
+			<div class="form-group">
+				<label for="name">Name of the Test</label>
+				<input type="text" class="form-control" id="name" name="name" value="{{name}}" required>
+			</div>
+			<div class="form-group">
+				<label for="no_of_questions">Number of Questions</label>
+				<input type="number" class="form-control" id="no_of_questions" name="no_of_questions" value="{{no_of_questions}}" required>
+			</div>
+			<div class="form-group">
+				<label for="start">Start Time</label>
+	            <input type='text' class="form-control" id="start" name="start" value="{{start}}" required>
+			</div>
+			<div class="form-group">
+				<label for="end">End Time</label>
+	            <input type='text' class="form-control" id="end" name="end" value="{{end}}" required/>
+			</div>
+			<div class="form-group">
+				<label for="duration">Test Duration</label>
+				<input type="number" class="form-control" id="duration" name="duration" value="{{duration}}" required>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<div class="col-md-6">
+			<div id="accordion" role="tablist" aria-multiselectable="true">
+			  <div class="card">
+			    <div class="card-header" role="tab" id="headingOne">
+			      <h5 class="mb-0">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" style="color:black; text-decoration: none" aria-controls="collapseOne">
+			          Description
+			        </a>
+			      </h5>
+			    </div>
+
+			    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+			      <div class="card-block">
+			        <form class="ewrapper" style="padding: 15px; padding-left: 30px; padding-right: 30px;" id="description" action="/edit_description/{{identity}}" method="POST">
+					    <div class="form-group">
+						  <div class="toolbar" style="display: none;">
+						    <a data-wysihtml-command="bold" title="CTRL+B" class="btn btn-sm btn-outline-secondary"><i class="fa fa-bold" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="italic" title="CTRL+I" class="btn btn-sm btn-outline-secondary"><i class="fa fa-italic" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="superscript" title="sup" class="btn btn-sm btn-outline-secondary"><i class="fa fa-superscript" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="subscript" title="sub" class="btn btn-sm btn-outline-secondary"><i class="fa fa-subscript" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="createLink" class="btn btn-sm btn-outline-secondary"><i class="fa fa-link" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="removeLink" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chain-broken" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="formatBlock" data-wysihtml-command-value="h1" class="btn btn-sm btn-outline-secondary">h1</a>
+						    <a data-wysihtml-command="formatBlock" data-wysihtml-command-value="h2" class="btn btn-sm btn-outline-secondary">h2</a>
+						    <a data-wysihtml-command="insertUnorderedList" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list-ul" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="insertOrderedList" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list-ol" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="formatCode" data-wysihtml-command-value="language-html" class="btn btn-sm btn-outline-secondary"><i class="fa fa-code" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="undo" class="btn btn-sm btn-outline-secondary"><i class="fa fa-undo" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="redo" class="btn btn-sm btn-outline-secondary"><i class="fa fa-repeat" aria-hidden="true"></i></a><br>
+						    <a data-wysihtml-action="change_view">switch to html view</a>
+						    
+						    <div data-wysihtml-dialog="createLink" style="display: none;">
+						      <label>
+						        Link:
+						        <input data-wysihtml-dialog-field="href" value="http://">
+						      </label>
+						      <a data-wysihtml-dialog-action="save">OK</a>&nbsp;<a data-wysihtml-dialog-action="cancel">Cancel</a>
+						    </div>
+						    
+						    <div data-wysihtml-dialog="insertImage" style="display: none;">
+						      <label>
+						        Image:
+						        <input data-wysihtml-dialog-field="src" value="http://">
+						      </label>
+						      <label>
+						        Align:
+						        <select data-wysihtml-dialog-field="className">
+						          <option value="">default</option>
+						          <option value="wysiwyg-float-left">left</option>
+						          <option value="wysiwyg-float-right">right</option>
+						        </select>
+						      </label>
+						      <a data-wysihtml-dialog-action="save">OK</a>&nbsp;<a data-wysihtml-dialog-action="cancel">Cancel</a>
+						    </div>
+						  </div>
+						  <br>
+						  <div class="editable" placeholder="Enter description of the test (if any)"></div>
+						  <input type="textarea" id="description_proxy" name="description" hidden>
+						  <br><input type="reset" class="btn btn-secondary btn-sm" value="Clear Everything"><input type="submit" class="btn btn-primary btn-sm float-right" value="Save Changes">
+						</div>
+					</form>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="card">
+			    <div class="card-header" role="tab" id="headingTwo">
+			      <h5 class="mb-0">
+			        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" style="color:black; text-decoration: none" aria-controls="collapseTwo">
+			          Grading Rules
+			        </a>
+			      </h5>
+			    </div>
+			    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+			      <div class="card-block">
+			        <form class="ewrapper" style="padding: 15px; padding-left: 30px; padding-right: 30px;" id="grading" action="/edit_grading/{{identity}}" method="POST">
+					    <div class="form-group">
+						  <div class="toolbar" style="display: none;">
+						    <a data-wysihtml-command="bold" title="CTRL+B" class="btn btn-sm btn-outline-secondary"><i class="fa fa-bold" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="italic" title="CTRL+I" class="btn btn-sm btn-outline-secondary"><i class="fa fa-italic" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="superscript" title="sup" class="btn btn-sm btn-outline-secondary"><i class="fa fa-superscript" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="subscript" title="sub" class="btn btn-sm btn-outline-secondary"><i class="fa fa-subscript" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="createLink" class="btn btn-sm btn-outline-secondary"><i class="fa fa-link" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="removeLink" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chain-broken" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="formatBlock" data-wysihtml-command-value="h1" class="btn btn-sm btn-outline-secondary">h1</a>
+						    <a data-wysihtml-command="formatBlock" data-wysihtml-command-value="h2" class="btn btn-sm btn-outline-secondary">h2</a>
+						    <a data-wysihtml-command="insertUnorderedList" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list-ul" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="insertOrderedList" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list-ol" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="formatCode" data-wysihtml-command-value="language-html" class="btn btn-sm btn-outline-secondary"><i class="fa fa-code" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="undo" class="btn btn-sm btn-outline-secondary"><i class="fa fa-undo" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="redo" class="btn btn-sm btn-outline-secondary"><i class="fa fa-repeat" aria-hidden="true"></i></a><br>
+						    <a data-wysihtml-action="change_view">switch to html view</a>
+						    
+						    <div data-wysihtml-dialog="createLink" style="display: none;">
+						      <label>
+						        Link:
+						        <input data-wysihtml-dialog-field="href" value="http://">
+						      </label>
+						      <a data-wysihtml-dialog-action="save">OK</a>&nbsp;<a data-wysihtml-dialog-action="cancel">Cancel</a>
+						    </div>
+						    
+						    <div data-wysihtml-dialog="insertImage" style="display: none;">
+						      <label>
+						        Image:
+						        <input data-wysihtml-dialog-field="src" value="http://">
+						      </label>
+						      <label>
+						        Align:
+						        <select data-wysihtml-dialog-field="className">
+						          <option value="">default</option>
+						          <option value="wysiwyg-float-left">left</option>
+						          <option value="wysiwyg-float-right">right</option>
+						        </select>
+						      </label>
+						      <a data-wysihtml-dialog-action="save">OK</a>&nbsp;<a data-wysihtml-dialog-action="cancel">Cancel</a>
+						    </div>
+						  </div>
+						  <br>
+						  <div class="editable" placeholder="Enter grading rules of the test (if any)"></div>
+						  <input type="textarea" id="grading_proxy" name="grading" hidden>
+						  <br><input type="reset" class="btn btn-secondary btn-sm" value="Clear Everything"><input type="submit" class="btn btn-primary btn-sm float-right" value="Save Changes">
+						</div>
+					</form>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="card">
+			    <div class="card-header" role="tab" id="headingThree">
+			      <h5 class="mb-0">
+			        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" style="color:black; text-decoration: none" aria-controls="collapseThree">
+			          Instructions
+			        </a>
+			      </h5>
+			    </div>
+			    <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+			      <div class="card-block">
+			        <form class="ewrapper" style="padding: 15px; padding-left: 30px; padding-right: 30px;" id="instructions" action="/edit_instructions/{{identity}}" method="POST">
+					    <div class="form-group">
+						  <div class="toolbar" style="display: none;">
+						    <a data-wysihtml-command="bold" title="CTRL+B" class="btn btn-sm btn-outline-secondary"><i class="fa fa-bold" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="italic" title="CTRL+I" class="btn btn-sm btn-outline-secondary"><i class="fa fa-italic" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="superscript" title="sup" class="btn btn-sm btn-outline-secondary"><i class="fa fa-superscript" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="subscript" title="sub" class="btn btn-sm btn-outline-secondary"><i class="fa fa-subscript" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="createLink" class="btn btn-sm btn-outline-secondary"><i class="fa fa-link" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="removeLink" class="btn btn-sm btn-outline-secondary"><i class="fa fa-chain-broken" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="formatBlock" data-wysihtml-command-value="h1" class="btn btn-sm btn-outline-secondary">h1</a>
+						    <a data-wysihtml-command="formatBlock" data-wysihtml-command-value="h2" class="btn btn-sm btn-outline-secondary">h2</a>
+						    <a data-wysihtml-command="insertUnorderedList" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list-ul" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="insertOrderedList" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list-ol" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="formatCode" data-wysihtml-command-value="language-html" class="btn btn-sm btn-outline-secondary"><i class="fa fa-code" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="undo" class="btn btn-sm btn-outline-secondary"><i class="fa fa-undo" aria-hidden="true"></i></a>
+						    <a data-wysihtml-command="redo" class="btn btn-sm btn-outline-secondary"><i class="fa fa-repeat" aria-hidden="true"></i></a><br>
+						    <a data-wysihtml-action="change_view">switch to html view</a>
+						    
+						    <div data-wysihtml-dialog="createLink" style="display: none;">
+						      <label>
+						        Link:
+						        <input data-wysihtml-dialog-field="href" value="http://">
+						      </label>
+						      <a data-wysihtml-dialog-action="save">OK</a>&nbsp;<a data-wysihtml-dialog-action="cancel">Cancel</a>
+						    </div>
+						    
+						    <div data-wysihtml-dialog="insertImage" style="display: none;">
+						      <label>
+						        Image:
+						        <input data-wysihtml-dialog-field="src" value="http://">
+						      </label>
+						      <label>
+						        Align:
+						        <select data-wysihtml-dialog-field="className">
+						          <option value="">default</option>
+						          <option value="wysiwyg-float-left">left</option>
+						          <option value="wysiwyg-float-right">right</option>
+						        </select>
+						      </label>
+						      <a data-wysihtml-dialog-action="save">OK</a>&nbsp;<a data-wysihtml-dialog-action="cancel">Cancel</a>
+						    </div>
+						  </div>
+						  <br>
+						  <div class="editable" placeholder="Enter instructions of the test (if any)"></div>
+						  <input type="textarea" id="instructions_proxy" name="instructions" hidden>
+						  <br><input type="reset" class="btn btn-secondary btn-sm" value="Clear Everything"><input type="submit" class="btn btn-primary btn-sm float-right" value="Save Changes">
+						</div>
+					</form>
+			      </div>
+			    </div>
+			  </div>
+			</div>
 		</div>
-		<div class="form-group">
-			<label for="name">Name of the Test</label>
-			<input type="text" class="form-control" id="name" name="name" value="{{name}}" required>
-		</div>
-		<div class="form-group">
-			<label for="no_of_questions">Number of Questions</label>
-			<input type="number" class="form-control" id="no_of_questions" name="no_of_questions" value="{{no_of_questions}}" required>
-		</div>
-		<div class="form-group">
-			<label for="start">Start Time</label>
-            <input type='text' class="form-control" id="start" name="start" value="{{start}}" required>
-		</div>
-		<div class="form-group">
-			<label for="end">End Time</label>
-            <input type='text' class="form-control" id="end" name="end" value="{{end}}" required/>
-		</div>
-		<div class="form-group">
-			<label for="duration">Test Duration</label>
-			<input type="number" class="form-control" id="duration" name="duration" value="{{duration}}" required>
-		</div>
-		<button type="submit" class="btn btn-primary">Submit</button>
-	</form>
+	</div>
   </div>
   <div role="tabpanel" class="tab-pane fade" id="questions"></div>
   <div role="tabpanel" class="tab-pane fade" id="invites"></div>
 </div>
+<script type="text/javascript">
+	var editors = [];
+	 
+	  $('.ewrapper').each(function(idx, wrapper) {
+	    var e = new wysihtml.Editor($(wrapper).find('.editable').get(0), {
+	      toolbar:        $(wrapper).find('.toolbar').get(0),
+	      parserRules:    wysihtmlParserRules,
+	      stylesheets:  "/styles/richtexteditor.css"
+	    });
+	    editors.push(e);
+	  });
+
+      $.get("/edit_description/{{identity}}",function(data){
+    	console.log(data)
+    	editors[0].setValue(data)
+      })
+      $.get("/edit_grading/{{identity}}",function(data){
+    	console.log(data)
+    	editors[1].setValue(data)
+      })
+      $.get("/edit_instructions/{{identity}}",function(data){
+    	console.log(data)
+    	editors[2].setValue(data)
+      })
+
+	  $('#description').submit(function() {
+	    $('#description_proxy').val(editors[0].getValue())
+	    return true;
+	  });
+	  $('#grading').submit(function() {
+	    $('#grading_proxy').val(editors[1].getValue())
+	    return true;
+	  });
+	  $('#instructions').submit(function() {
+	    $('#instructions_proxy').val(editors[2].getValue())
+	    return true;
+	  });
+</script>
 {% endblock%}

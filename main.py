@@ -32,7 +32,7 @@ root = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 class Auth:
     CLIENT_ID = ('891614416155-5t5babc77fivqfslma1c3u6r2r9fp1o1.apps.googleusercontent.com')
     CLIENT_SECRET = 'UnGr0t5VT0d3l4PLgICkQoy6'
-    REDIRECT_URI = 'https://localhost:5000/oauth2callback'
+    REDIRECT_URI = 'https://127.0.0.1:5000/oauth2callback'
     AUTH_URI = 'https://accounts.google.com/o/oauth2/auth'
     TOKEN_URI = 'https://accounts.google.com/o/oauth2/token'
     USER_INFO = 'https://www.googleapis.com/userinfo/v2/me'
@@ -138,6 +138,7 @@ def index():
         return render_template('error.html')
 
 @app.route('/admin')
+@login_required
 @admin_login_required
 def admin():
     try:
@@ -147,6 +148,7 @@ def admin():
         return render_template('error.html')
 
 @app.route('/load_tests', methods=['POST'])
+@login_required
 @admin_login_required
 def load_tests():
     try:
@@ -163,6 +165,7 @@ def load_tests():
         return render_template('error.html')
 
 @app.route('/create_test', methods=['GET','POST'])
+@login_required
 @admin_login_required
 def create_test():
     if request.method == "GET":
@@ -213,15 +216,79 @@ def create_test():
             return redirect(url_for("create_test", message=str(e), valid=False))
 
 @app.route('/edit_test/<testid>', methods=['GET'])
+@login_required
 @admin_login_required
 def edit_test(testid=None, message=None, valid=False):
     if testid == None:
         app.logger.info("requested edit_test without TestID: "+str(e))
-        return redrect('/')
+        return redirect(url_for('admin'))
     else:
         test = Test.query.filter(Test.identity==testid).first() 
         if test:
             return render_template("edit_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid)
+        else:   
+            return redirect(url_for("create_test"))
+
+@app.route('/edit_description/<testid>', methods=['GET', 'POST'])
+@login_required
+@admin_login_required
+def edit_description(testid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested edit_description without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first()
+        if test:
+            if request.method == 'GET':
+                return test.description
+            if request.method == 'POST':
+                test.description = request.form['description']
+                db.session.commit()
+                message = "Updated description."
+                valid = True
+                return redirect(url_for("edit_test", testid=test.identity , identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid))
+        else:   
+            return redirect(url_for("create_test"))
+
+@app.route('/edit_grading/<testid>', methods=['GET', 'POST'])
+@login_required
+@admin_login_required
+def edit_grading(testid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested edit_grading without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first()
+        if test:
+            if request.method == 'GET':
+                return test.grading
+            if request.method == 'POST':
+                test.grading = request.form['grading']
+                db.session.commit()
+                message = "Updated grading."
+                valid = True
+                return redirect(url_for("edit_test", testid=test.identity , identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid))
+        else:   
+            return redirect(url_for("create_test"))
+
+@app.route('/edit_instructions/<testid>', methods=['GET', 'POST'])
+@login_required
+@admin_login_required
+def edit_instructions(testid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested edit_instructions without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first()
+        if test:
+            if request.method == 'GET':
+                return test.instructions
+            if request.method == 'POST':
+                test.instructions = request.form['instructions']
+                db.session.commit()
+                message = "Updated instructions."
+                valid = True
+                return redirect(url_for("edit_test", testid=test.identity , identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid))
         else:   
             return redirect(url_for("create_test"))
 
@@ -243,7 +310,7 @@ def callback():
         if request.args.get('error') == 'access_denied':
             return 'You denied access.'
         return 'Error encountered.'
-    if 'code' not in request.args and 'state' not in request.args:
+    if 'code' not in request.args and 'oauth_state' not in request.args:
         return redirect(url_for('login'))
     else:
         google = get_google_auth(state=session['oauth_state'])
@@ -718,5 +785,7 @@ def playvideo(song):
 db.create_all()
 
 if __name__ == "__main__":
+        # from werkzeug.serving import make_ssl_devcert
+        # make_ssl_devcert('./ssl', host='localhost')
         app.debug = True
         app.run(ssl_context=('ssl.crt','ssl.key'))
