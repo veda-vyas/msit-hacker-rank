@@ -98,15 +98,15 @@ class Test(db.Model):
 class Question(db.Model):
     __tablename__ = "question"
     id = db.Column(db.Integer, primary_key=True)
-    identity = db.Column(db.String(5), unique=True)
-    testid = db.Column(db.String(5), unique=True)
+    identity = db.Column(db.String(10), unique=True)
+    testid = db.Column(db.String(5))
     name = db.Column(db.Text)
     statement = db.Column(db.Text)
     input_format = db.Column(db.Text)
     output_format = db.Column(db.Text)
     constraints = db.Column(db.Text)
     marks = db.Column(db.Integer)
-    languages = db.Column(db.Text)
+    languages = db.Column(db.Text, default="Python")
 
 class Activity(db.Model):
     __tablename__ = "activity"
@@ -191,7 +191,7 @@ def load_questions(testid=None):
             questions_arr = []
             for question in questions:
                 questions_arr.append([
-                    "<a href='/edit_question/"+question.identity+"'>"+question.identity+"</a>", question.name, question.languages, question.marks
+                    "<a href='/edit_question/"+question.testid+"/"+question.identity+"'>"+question.identity+"</a>", question.name, question.languages, question.marks
                 ])
             return json.dumps(questions_arr)
         except Exception as e:
@@ -201,10 +201,10 @@ def load_questions(testid=None):
 @app.route('/create_test', methods=['GET','POST'])
 @login_required
 @admin_login_required
-def create_test():
+def create_test(message=None, valid=None):
     if request.method == "GET":
         try:
-            return render_template("create_test.html")
+            return render_template("create_test.html", message=message, valid=valid)
         except Exception as e:
             app.logger.info("Error in create_test: "+str(e))
             return render_template('error.html')
@@ -249,6 +249,62 @@ def create_test():
             app.logger.info("Error in create_test: "+str(e))
             return redirect(url_for("create_test", message=str(e), valid=False))
 
+@app.route('/create_question/<testid>', methods=['GET','POST'])
+@login_required
+@admin_login_required
+def create_question(testid=None, message=None, valid=None):
+    if testid == None:
+        app.logger.info("requested create_question without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        if request.method == "GET":
+            try:
+                return render_template("create_question.html", testid=testid, message=message, valid=valid)
+            except Exception as e:
+                app.logger.info("Error in create_question: "+str(e))
+                return render_template('error.html')
+        if request.method == "POST":
+            try:
+                f = request.form
+                name = f["name"]
+                id = f["id"]
+                statement = ""
+                input_format = ""
+                output_format= ""
+                constraints = ""
+                marks = f['marks']
+                questions = Question.query.filter(Question.identity==id,Question.testid==testid).all()
+                if len(questions) == 0:
+                    if len(id) <= 10:
+                        new_question = Question(identity=id,testid=testid,name=name,statement=statement,input_format=input_format,output_format=output_format,constraints=constraints,marks=marks)
+                        db.session.add(new_question)
+                        db.session.commit()
+                        message = "Successfully created a question."
+                        valid = True
+                    else:
+                        message = "Please choose a QuestionID which is <=10 characters"
+                        valid = False    
+                    return redirect(url_for("create_question", testid=testid, message=message, valid=valid))
+                else:
+                    existing_question = questions[0]
+
+                    existing_question.identity = id
+                    existing_question.name = name
+                    existing_question.statement = statement
+                    existing_question.input_format = input_format 
+                    existing_question.output_format = output_format 
+                    existing_question.constraints = constraints 
+                    existing_question.marks = marks 
+                    db.session.commit()
+                    
+                    message = "Question ID already exists. Existing Question ("+id+") updated."
+                    valid = True
+
+                    return redirect(url_for("create_question", testid=testid, message=message, valid=valid))
+            except Exception as e:
+                app.logger.info("Error in create_question: "+str(e))
+                return redirect(url_for("create_question", message=str(e), valid=False))
+
 @app.route('/edit_test/<testid>', methods=['GET'])
 @login_required
 @admin_login_required
@@ -262,6 +318,23 @@ def edit_test(testid=None, message=None, valid=False):
             return render_template("edit_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid)
         else:   
             return redirect(url_for("create_test"))
+
+@app.route('/edit_question/<testid>/<qid>', methods=['GET'])
+@login_required
+@admin_login_required
+def edit_question(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested edit_question without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested edit_question without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        question = Question.query.filter(Question.testid==testid,Question.identity==qid).first() 
+        if question:
+            return render_template("edit_question.html", identity=question.identity, testid=question.testid, name=question.name, statement=question.statement, input_format=question.input_format, output_format=question.output_format, constraints=question.constraints, marks=question.marks, message=message, valid=valid)
+        else:   
+            return redirect(url_for("create_question", testid=testid))
 
 @app.route('/edit_description/<testid>', methods=['GET', 'POST'])
 @login_required
@@ -325,6 +398,114 @@ def edit_instructions(testid=None, message=None, valid=False):
                 return redirect(url_for("edit_test", testid=test.identity , identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid))
         else:   
             return redirect(url_for("create_test"))
+
+@app.route('/edit_statement/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+@admin_login_required
+def edit_statement(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested edit_statement without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested edit_statement without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        question = Question.query.filter(Question.identity==qid,Question.testid==testid).first()
+        if question:
+            if request.method == 'GET':
+                app.logger.info("question statement"+question.statement)
+                return question.statement
+            if request.method == 'POST':
+                app.logger.info("Question statement post: "+request.form['statement'])
+                question.statement = request.form['statement']
+                db.session.commit()
+                app.logger.info("Question statement after dbcommit: "+question.statement)
+                message = "Updated statement."
+                valid = True
+                return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
+        else:   
+            return redirect(url_for("create_question"))
+
+@app.route('/edit_input_format/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+@admin_login_required
+def edit_input_format(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested edit_input_format without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested edit_input_format without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        question = Question.query.filter(Question.identity==qid,Question.testid==testid).first()
+        if question:
+            if request.method == 'GET':
+                # app.logger.info("question input_format"+question.input_format)
+                return question.input_format
+            if request.method == 'POST':
+                # app.logger.info("Question input_format post: "+request.form['input_format'])
+                question.input_format = request.form['input_format']
+                db.session.commit()
+                # app.logger.info("Question input_format after dbcommit: "+question.input_format)
+                message = "Updated input_format."
+                valid = True
+                return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
+        else:   
+            return redirect(url_for("create_question"))
+
+@app.route('/edit_output_format/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+@admin_login_required
+def edit_output_format(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested edit_output_format without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested edit_output_format without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        question = Question.query.filter(Question.identity==qid,Question.testid==testid).first()
+        if question:
+            if request.method == 'GET':
+                # app.logger.info("question output_format"+question.output_format)
+                return question.output_format
+            if request.method == 'POST':
+                # app.logger.info("Question output_format post: "+request.form['output_format'])
+                question.output_format = request.form['output_format']
+                db.session.commit()
+                # app.logger.info("Question output_format after dbcommit: "+question.output_format)
+                message = "Updated output_format."
+                valid = True
+                return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
+        else:   
+            return redirect(url_for("create_question"))
+
+@app.route('/edit_constraints/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+@admin_login_required
+def edit_constraints(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested edit_constraints without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested edit_constraints without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        question = Question.query.filter(Question.identity==qid,Question.testid==testid).first()
+        if question:
+            if request.method == 'GET':
+                # app.logger.info("question constraints"+question.constraints)
+                return question.constraints
+            if request.method == 'POST':
+                # app.logger.info("Question constraints post: "+request.form['constraints'])
+                question.constraints = request.form['constraints']
+                db.session.commit()
+                # app.logger.info("Question constraints after dbcommit: "+question.constraints)
+                message = "Updated constraints."
+                valid = True
+                return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
+        else:   
+            return redirect(url_for("create_question"))
 
 @app.route('/login')
 def login():
