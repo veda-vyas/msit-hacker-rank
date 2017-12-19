@@ -24,6 +24,7 @@ from werkzeug.utils import secure_filename
 import zipfile
 from sqlalchemy import cast, Date, extract
 from functools import wraps
+from seccomp import SecureEvalHost
 # import timestring
 
 IST = pytz.timezone('Asia/Kolkata')
@@ -503,6 +504,48 @@ def edit_constraints(testid=None, qid=None, message=None, valid=False):
                 # app.logger.info("Question constraints after dbcommit: "+question.constraints)
                 message = "Updated constraints."
                 valid = True
+                return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
+        else:   
+            return redirect(url_for("create_question"))
+
+def evaluate(code):
+    sec = SecureEvalHost()
+    sec.start_child()
+    try:
+        print sec.eval('print')
+    finally:
+        sec.kill_child()
+
+@app.route('/submitcode/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+@admin_login_required
+def submitcode(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested submitcode without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested submitcode without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        question = Question.query.filter(Question.identity==qid,Question.testid==testid).first()
+        if question:
+            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+            tmp_path = 'submissions/'+session['email']+'/'+testid
+            directory = os.path.join(BASE_DIR, tmp_path)
+            if request.method == 'GET':
+                if os.path.exists(directory+"/"+qid+".py"):
+                    f = open(directory+"/"+qid+".py", "r")
+                    return f.read()
+                return ""
+            if request.method == 'POST':
+                if request.form["action"] == "Test Run":
+                        app.logger.info("Test Running Code: %s",request.form['code_'+qid])
+                        evaluate(request.form['code_'+qid])
+                if request.form["action"] == "Submit Solution":
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+                    with open(directory+"/"+qid+".py", "wb") as f:
+                        f.write(request.form['code_'+qid])
                 return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
         else:   
             return redirect(url_for("create_question"))

@@ -115,6 +115,9 @@
 	    <a class="nav-link active" href="#details" role="tab" data-toggle="tab">Question</a>
 	  </li>
 	  <li class="nav-item">
+	    <a class="nav-link" href="#code" role="tab" data-toggle="tab">Code Editor</a>
+	  </li>
+	  <li class="nav-item">
 	    <a class="nav-link" href="#testcases" role="tab" data-toggle="tab">Testcases</a>
 	  </li>
 	  <li class="nav-item">
@@ -414,37 +417,54 @@
 	</div>
   </div>
 
-  <!-- Testcases -->
-  <div role="tabpanel" class="tab-pane fade" id="testcases"><br>
-	<!-- <div style="padding: 10px;">
-		<a href="/create_question/{{identity}}" class="btn btn-success float-right">Create Question</a>
-	</div><br><br>
-	<div id="content">
-		<table id="questions_table" class="display" width="100%"></table>
+  <div role="tabpanel" class="tab-pane fade" id="code">
+  	<div class="col-sm-12 col-md-6"><br>
+		<form id="form_code" action="/submitcode/{{testid}}/{{identity}}" method="POST">
+		  	<div id="status"></div>
+		  	<div id="code_{{identity}}" style="height: 450px;"></div>
+		  	<textarea name="code_{{identity}}" style="display: none;"></textarea><br>
+			<div class="row">
+				  <div class="col-md-6">
+				  	<button type="submit" id="testrun" name ="action" value="Test Run" class="btn btn-default float-left">Test Run</button>
+				  </div>
+				  <div class="col-md-6">
+				  	<button type="submit" name="action" value="Submit Solution" class="btn btn-success float-right">Submit as Solution</button>
+				  </div>
+			</div>
+		</form>  
 	</div>
-
-	<script type="text/javascript">
-		$(document).ready(function() {
-			var jqxhr = $.post( "/load_questions/{{identity}}", function(res) {
-				tests = JSON.parse(res)
-			    $('#questions_table').DataTable( {
-			        data: tests,
-			        columns: [
-			            { title: "Question ID" },
-			            { title: "Name" },
-			            { title: "Languages" },
-			            { title: "Marks" }
-			        ],
-					retrieve: true,
-			        paging: false
-			    });
-			})
-			.fail(function() {
-				$("#content").html( "<p class='float-center'>Error in fetching the data.</p>" );
-			})
-		});
-	</script> -->
   </div>
+	<script type="text/javascript">
+		var editor = ace.edit("code_{{identity}}");
+	    editor.setTheme("ace/theme/monokai");
+	    editor.getSession().setMode("ace/mode/python");
+	    $.get("/submitcode/{{testid}}/{{identity}}",function(data){
+	    	console.log(data)
+	    	editor.getSession().setValue(data)
+	    })
+	    editor.setOptions({
+	    	fontSize: "12pt"
+	    })
+	    var textarea = $('textarea[name="code_{{identity}}"]');
+		textarea.val(editor.getSession().getValue());
+		editor.getSession().on("change", function () {
+		    textarea.val(editor.getSession().getValue());
+		    console.log(textarea.val())
+		});
+
+		var form = document.getElementById('form_code');
+		form.onsubmit = function() {
+		    form.target = '_self';
+		};
+
+		document.getElementById('testrun').onclick = function() {
+		    form.target = '_blank';
+		    form.submit();
+		}
+	</script>
+
+  <!-- Testcases -->
+  <div role="tabpanel" class="tab-pane fade" id="testcases"></div>
   
   <!-- Languages -->
   <div role="tabpanel" class="tab-pane fade" id="languages"></div>
