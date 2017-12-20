@@ -508,15 +508,74 @@ def edit_constraints(testid=None, qid=None, message=None, valid=False):
         else:   
             return redirect(url_for("create_question"))
 
-def evaluate(code):
-    sec = SecureEvalHost()
-    sec.start_child()
-    try:
-        print sec.eval('print')
-    finally:
-        sec.kill_child()
+@app.route('/evalcode', methods=['POST'])
+@login_required
+@admin_login_required
+def evalcode(code,timeout):
+    if code == None:
+        return redirect(url_for(request.referrer))
+    if request.method == "POST":
+        import subprocess
+        from threading import Timer
+        cmd = ["sandbox/bin/run", "python", "-c", code]
+        p = subprocess.Popen(cmd, stdout = subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                stdin=subprocess.PIPE)
+        timer = Timer(timeout, p.kill)
+        timer.start()
+        out,err = p.communicate()
+        if timer.is_alive():
+            timer.cancel()
+            return out,err
+        return "","Time limit exceeded."
 
-@app.route('/submitcode/<testid>/<qid>', methods=['GET', 'POST'])
+@app.route('/getoutput/<testid>/<qid>', methods=['GET'])
+@login_required
+@admin_login_required
+def getoutput(testid=None,qid=None):
+    if testid == None:
+        app.logger.info("requested getcode without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested getcode without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        if request.method == "GET":
+            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+            tmp_path = 'submissions/'+session['email']+'/'+testid
+            directory = os.path.join(BASE_DIR, tmp_path)
+            
+            if os.path.exists(directory+"/"+qid+".txt"):
+                f = open(directory+"/"+qid+".txt", "r")
+                content = f.read()
+                app.logger.info("getting output: %s",content)
+                return content
+
+            return "Could not fetch the output. Execute code again."
+
+@app.route('/getcode/<testid>/<qid>', methods=['GET'])
+@login_required
+@admin_login_required
+def getcode(testid=None,qid=None):
+    if testid == None:
+        app.logger.info("requested getcode without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested getcode without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        if request.method == "GET":
+            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+            tmp_path = 'submissions/'+session['email']+'/'+testid
+            directory = os.path.join(BASE_DIR, tmp_path)
+            
+            if os.path.exists(directory+"/"+qid+".py"):
+                f = open(directory+"/"+qid+".py", "r")
+                return f.read()
+
+            return "Could not fetch the code. Try submitting again."
+
+@app.route('/submitcode/<testid>/<qid>', methods=['POST'])
 @login_required
 @admin_login_required
 def submitcode(testid=None, qid=None, message=None, valid=False):
@@ -532,21 +591,29 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
             BASE_DIR = os.path.dirname(os.path.abspath(__file__))
             tmp_path = 'submissions/'+session['email']+'/'+testid
             directory = os.path.join(BASE_DIR, tmp_path)
-            if request.method == 'GET':
-                if os.path.exists(directory+"/"+qid+".py"):
-                    f = open(directory+"/"+qid+".py", "r")
-                    return f.read()
-                return ""
             if request.method == 'POST':
+                code = request.form['code_'+qid]
+
                 if request.form["action"] == "Test Run":
-                        app.logger.info("Test Running Code: %s",request.form['code_'+qid])
-                        evaluate(request.form['code_'+qid])
+                    app.logger.info("Test Running Code: %s",code)
+                    output,err = evalcode(code, 1)
+                        
                 if request.form["action"] == "Submit Solution":
-                    if not os.path.exists(directory):
-                        os.makedirs(directory)
-                    with open(directory+"/"+qid+".py", "wb") as f:
-                        f.write(request.form['code_'+qid])
-                return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
+                    app.logger.info("Submitting Code: %s",code)
+                    output,err = evalcode(code, 1)
+                
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                with open(directory+"/"+qid+".py", "wb") as f:
+                    f.write(code)
+                
+                with open(directory+"/"+qid+".txt", "wb") as f:
+                    if output == "":
+                        f.write(err)
+                    else:
+                        f.write(output)
+                
+                return redirect(url_for("edit_question", testid=question.testid , qid=question.identity, error=err, output=output, show_editor=True))
         else:   
             return redirect(url_for("create_question"))
 

@@ -115,7 +115,7 @@
 	    <a class="nav-link active" href="#details" role="tab" data-toggle="tab">Question</a>
 	  </li>
 	  <li class="nav-item">
-	    <a class="nav-link" href="#code" role="tab" data-toggle="tab">Code Editor</a>
+	    <a class="nav-link" id="editor_trigger" href="#code" role="tab" data-toggle="tab">Code Editor</a>
 	  </li>
 	  <li class="nav-item">
 	    <a class="nav-link" href="#testcases" role="tab" data-toggle="tab">Testcases</a>
@@ -418,27 +418,43 @@
   </div>
 
   <div role="tabpanel" class="tab-pane fade" id="code">
-  	<div class="col-sm-12 col-md-6"><br>
-		<form id="form_code" action="/submitcode/{{testid}}/{{identity}}" method="POST">
-		  	<div id="status"></div>
-		  	<div id="code_{{identity}}" style="height: 450px;"></div>
-		  	<textarea name="code_{{identity}}" style="display: none;"></textarea><br>
-			<div class="row">
-				  <div class="col-md-6">
-				  	<button type="submit" id="testrun" name ="action" value="Test Run" class="btn btn-default float-left">Test Run</button>
-				  </div>
-				  <div class="col-md-6">
-				  	<button type="submit" name="action" value="Submit Solution" class="btn btn-success float-right">Submit as Solution</button>
-				  </div>
-			</div>
-		</form>  
-	</div>
+  	<div class="row">
+	  	<div class="col-sm-12 col-md-6"><br>
+			<form id="form_code" action="/submitcode/{{testid}}/{{identity}}" method="POST">
+			  	<div id="status"></div>
+			  	<div id="code_{{identity}}" style="height: 450px;"></div>
+			  	<textarea name="code_{{identity}}" style="display: none;"></textarea><br>
+				<div class="row">
+					  <div class="col-md-6">
+					  	<button type="submit" id="testrun" name ="action" value="Test Run" class="btn btn-default float-left">Test Run</button>
+					  </div>
+					  <div class="col-md-6">
+					  	<button type="submit" name="action" value="Submit Solution" class="btn btn-success float-right">Submit as Solution</button>
+					  </div>
+				</div>
+			</form>  
+		</div>
+		<div class="col-sm-12 col-md-6"><br>
+			<h4>Output</h4><hr>
+			{% if request.args.get('error') %}
+				<div id="error">{{request.args.get('error')}}</div>
+				<!-- <div id="error_code">{{error}}</div> -->
+			{% endif %}
+			{% if request.args.get('output') %}
+				<div id="output_code">{{request.args.get('output')}}</div>
+				<!-- <div id="error_code">{{error}}</div> -->
+			{% endif %}
+		</div>
+  	</div>
   </div>
 	<script type="text/javascript">
+		if("{{ request.args.get('show_editor') }}"){
+			$('#editor_trigger').trigger('click')
+		}
 		var editor = ace.edit("code_{{identity}}");
 	    editor.setTheme("ace/theme/monokai");
 	    editor.getSession().setMode("ace/mode/python");
-	    $.get("/submitcode/{{testid}}/{{identity}}",function(data){
+	    $.get("/getcode/{{testid}}/{{identity}}",function(data){
 	    	console.log(data)
 	    	editor.getSession().setValue(data)
 	    })
@@ -461,6 +477,9 @@
 		    form.target = '_blank';
 		    form.submit();
 		}
+		// $("#form_code").bind('ajax:complete', function(data) {
+	 //    	$("#output_code").html(data)
+	 //    });
 	</script>
 
   <!-- Testcases -->
