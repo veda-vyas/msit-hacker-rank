@@ -24,7 +24,7 @@ from werkzeug.utils import secure_filename
 import zipfile
 from sqlalchemy import cast, Date, extract
 from functools import wraps
-from seccomp import SecureEvalHost
+# from seccomp import SecureEvalHost
 # import timestring
 
 IST = pytz.timezone('Asia/Kolkata')
@@ -508,26 +508,86 @@ def edit_constraints(testid=None, qid=None, message=None, valid=False):
         else:   
             return redirect(url_for("create_question"))
 
+@app.route('/get_content/<filename>', methods=['GET'])
+@login_required
+@admin_login_required
+def get_content(filename):
+    content = ""
+    with open(filename, "rb") as f:
+        content = f.read()
+    return content
+
+
 @app.route('/evalcode', methods=['POST'])
 @login_required
 @admin_login_required
-def evalcode(code,timeout):
-    if code == None:
+def evalcode(execution_path,inputs,outputs,timeout):
+    code =  get_content(execution_path)
+    if code == "":
         return redirect(url_for(request.referrer))
-    if request.method == "POST":
+    
+    global results
+
+    def execute(execution_path,input,output,timeout,index):
+        # with app.test_request_context():
         import subprocess
         from threading import Timer
-        cmd = ["sandbox/bin/run", "python", "-c", code]
+        from threading import Thread
+
+        testcase_eval = execution_path.split("/")
+        solution_file_path = testcase_eval[-2]+"/"+testcase_eval[-1]
+
+        cmd = ["sandbox/bin/run", "python", solution_file_path]
+        app.logger.info("cmd is: %s", cmd)
         p = subprocess.Popen(cmd, stdout = subprocess.PIPE,
                                 stderr=subprocess.PIPE,
                                 stdin=subprocess.PIPE)
         timer = Timer(timeout, p.kill)
         timer.start()
-        out,err = p.communicate()
+
+        given_input=open(input,"rb").read()
+        expected_output=open(output,"rb").read()
+        your_output,err = p.communicate(given_input)
+        your_output=str(your_output)
+        
         if timer.is_alive():
             timer.cancel()
-            return out,err
-        return "","Time limit exceeded."
+
+            your_output = your_output.replace('\r','').rstrip() #remove trailing newlines, if any
+            expected_output = expected_output.replace('\r','').rstrip()
+
+            if your_output == expected_output:
+                out,err = "Testcase Passed.", ""
+            elif err:
+                out,err = your_output,err
+            else:
+                out,err = "","Input: "+given_input+" \nExpected: "+expected_output+" \nYour Output: "+your_output
+            
+            results[index]['output'] = out
+            results[index]['error'] = err
+
+        return True
+    
+    if request.method == "POST":
+        if len(inputs) == len(outputs):
+            from threading import Thread
+            threads = []
+            results = []
+            for i in range(len(inputs)):
+                results.append({})
+                process = Thread(target=execute, args=[execution_path,inputs[i],outputs[i],5,i])
+                process.start()
+                threads.append(process)
+            for process in threads:
+                process.join()
+
+            # if os.path.exists(execution_path):
+            #     os.remove(execution_path)
+            os.remove(execution_path)
+            return results,""
+        else:
+            os.remove(execution_path)
+            return "","Lenghts of Inputs and Outputs is not same."
 
 @app.route('/getoutput/<testid>/<qid>', methods=['GET'])
 @login_required
@@ -575,6 +635,39 @@ def getcode(testid=None,qid=None):
 
             return "Could not fetch the code. Try submitting again."
 
+@app.route('/gettestcases/<testid>/<qid>', methods=['POST'])
+@login_required
+@admin_login_required
+def gettestcases(testid=None,qid=None):
+    if testid == None:
+        app.logger.info("requested gettestcases without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested gettestcases without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        if request.method == "POST":
+            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+            tmp_path = 'testcases/'+testid+'/'+qid
+            directory = os.path.join(BASE_DIR, tmp_path)
+            
+            inputs = []
+            outputs = []
+            
+            if os.path.exists(directory):
+                for root,dirs,files in os.walk(directory):
+                    for file in files:
+                        if 'input' in file and '.txt' in file:
+                            inputs.append(directory+"/"+file)
+                        if 'output' in file and '.txt' in file:
+                            outputs.append(directory+"/"+file)
+                    break
+
+            inputs = sorted(inputs)
+            outputs = sorted(outputs)
+            
+            return inputs,outputs
+
 @app.route('/submitcode/<testid>/<qid>', methods=['POST'])
 @login_required
 @admin_login_required
@@ -591,23 +684,44 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
             BASE_DIR = os.path.dirname(os.path.abspath(__file__))
             tmp_path = 'submissions/'+session['email']+'/'+testid
             directory = os.path.join(BASE_DIR, tmp_path)
+
             if request.method == 'POST':
                 code = request.form['code_'+qid]
+                execution_path = os.path.join(BASE_DIR, 'sandbox/root/'+session['email'])
+                
 
                 if request.form["action"] == "Test Run":
                     app.logger.info("Test Running Code: %s",code)
-                    output,err = evalcode(code, 1)
+                    if not os.path.exists(execution_path):
+                        os.makedirs(execution_path)
+                    execution_path+="/Solution.py"
+                    inputs,outputs = gettestcases(testid, qid)
+                    if not os.path.exists(execution_path):
+                        with open(execution_path, "wb") as f:
+                            f.write(code)
+                        output,err = evalcode(execution_path, inputs, outputs, 5)
+                    else:
+                        output,err = "","An instance of your previous execution is still running. Please email <vy[at]fju[dot]us>."
                         
                 if request.form["action"] == "Submit Solution":
                     app.logger.info("Submitting Code: %s",code)
-                    output,err = evalcode(code, 1)
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+                    with open(directory+"/"+qid+".py", "wb") as f:
+                        f.write(code)
+                    if not os.path.exists(execution_path):
+                        os.makedirs(execution_path)
+                    execution_path+="/Solution.py"
+                    inputs,outputs = gettestcases(testid, qid)
+                    if not os.path.exists(execution_path):
+                        with open(execution_path, "wb") as f:
+                            f.write(code)
+                        output,err = evalcode(execution_path, inputs, outputs, 5)
+                        output = json.dumps(output)
+                    else:
+                        output,err = "","An instance of your previous execution is still running. Please email <vy[at]fju[dot]us>."
                 
-                if not os.path.exists(directory):
-                    os.makedirs(directory)
-                with open(directory+"/"+qid+".py", "wb") as f:
-                    f.write(code)
-                
-                with open(directory+"/"+qid+".txt", "wb") as f:
+                with open(directory+"/"+qid+"_output.json", "wb") as f:
                     if output == "":
                         f.write(err)
                     else:

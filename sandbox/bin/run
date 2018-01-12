@@ -15,7 +15,7 @@ else
 fi
 
 # The default mount point for the sandbox if nothing else is specified.
-DEFAULT_MOUNT=(-m "$RUN_DIR/root:/:ro")
+DEFAULT_MOUNT=(-m "$RUN_DIR/root:/:rw")
 
 # Scan options recognized by sel_ldr (we only need to list those that take an
 # argument).

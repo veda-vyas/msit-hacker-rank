@@ -9,4 +9,5 @@ Werkzeug==0.10.4
 pyopenssl
 pytz
 timestring
+requests
 --extra-index-url=https://packagecloud.io/claudyus/LXC-Web-Panel/pypi/simple

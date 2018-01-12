@@ -1,2 +1,2 @@
-while True:
-    print "hello"
+import requests
+print raw_input()
