@@ -1,2 +1,2 @@
-import requests
-print raw_input()
+
+print raw_inpu()

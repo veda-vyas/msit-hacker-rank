@@ -557,7 +557,8 @@ def evalcode(execution_path,inputs,outputs,timeout):
             expected_output = expected_output.replace('\r','').rstrip()
 
             if your_output == expected_output:
-                out,err = "Testcase Passed.", ""
+                out,err = "","Input: "+given_input+" \nExpected: "+expected_output+" \nYour Output: "+your_output
+                # out,err = "Testcase Passed.", ""
             elif err:
                 out,err = your_output,err
             else:
@@ -690,6 +691,11 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                 execution_path = os.path.join(BASE_DIR, 'sandbox/root/'+session['email'])
                 
 
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                with open(directory+"/"+qid+".py", "wb") as f:
+                    f.write(code)
+
                 if request.form["action"] == "Test Run":
                     app.logger.info("Test Running Code: %s",code)
                     if not os.path.exists(execution_path):
@@ -700,15 +706,12 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                         with open(execution_path, "wb") as f:
                             f.write(code)
                         output,err = evalcode(execution_path, inputs, outputs, 5)
+                        output = json.dumps(output)
                     else:
                         output,err = "","An instance of your previous execution is still running. Please email <vy[at]fju[dot]us>."
                         
                 if request.form["action"] == "Submit Solution":
                     app.logger.info("Submitting Code: %s",code)
-                    if not os.path.exists(directory):
-                        os.makedirs(directory)
-                    with open(directory+"/"+qid+".py", "wb") as f:
-                        f.write(code)
                     if not os.path.exists(execution_path):
                         os.makedirs(execution_path)
                     execution_path+="/Solution.py"
