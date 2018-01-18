@@ -1,1 +1,1 @@
-[{"output": "", "error": "Traceback (most recent call last):\n  File \"vedavyas.yeleswarapu@gmail.com/Solution.py\", line 2, in <module>\n    print raw_inpu()\nNameError: name 'raw_inpu' is not defined\n"}, {"output": "", "error": "Traceback (most recent call last):\n  File \"vedavyas.yeleswarapu@gmail.com/Solution.py\", line 2, in <module>\n    print raw_inpu()\nNameError: name 'raw_inpu' is not defined\n"}]
+[{"output": "", "error": "Input: hello\n \nExpected: hello \nYour Output: hello"}, {"output": "", "error": "Input: hello\n \nExpected: hell \nYour Output: hello"}]

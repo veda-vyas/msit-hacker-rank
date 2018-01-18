@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block title %}HackerRank - Edit Test{% endblock %}
+{% block body %}
+	<style type="text/css">
+		.sub-nav-item {
+			padding: 5px;
+			background-color: white;
+			color: black;
+		}
+		.sub-nav {
+			background-color: #ccc;
+			border: 1px solid #929eaa;
+		}
+		#content {
+			padding: 10px;
+			border: 1px solid #929eaa;
+		}
+		.btn {
+			border-radius: 0px !important;
+		}
+		.tests_ul {
+			list-style-type: none;
+		}
+		.tests_ul li {
+			list-style-type: none;
+		}
+	</style>
+	<style>  
+	  #toolbar [data-wysihtml-action] {
+	    float: right;
+	  }
+	  
+	  #toolbar,
+	  textarea {
+	    width: 920px;
+	    padding: 5px;
+	    -webkit-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	    -moz-box-sizing: border-box;
+	    box-sizing: border-box;
+	  }
+	  
+	  textarea {
+	    height: 280px;
+	    border: 2px solid green;
+	    font-family: Verdana;
+	    font-size: 11px;
+	  }
+	  
+	  textarea:focus {
+	    color: black;
+	    border: 2px solid black;
+	  }
+	  
+	  .wysihtml-command-active {
+	    font-weight: bold;
+	  }
+	  
+	  [data-wysihtml-dialog] {
+	    margin: 5px 0 0;
+	    padding: 5px;
+	    border: 1px solid #666;
+	  }
+	  
+	  a[data-wysihtml-command-value="red"] {
+	    color: red;
+	  }
+	  
+	  a[data-wysihtml-command-value="green"] {
+	    color: green;
+	  }
+	  
+	  a[data-wysihtml-command-value="blue"] {
+	    color: blue;
+	  }
+	  
+	  div.editable {
+	    border: 1px dashed gray;
+	    padding: 10px;
+	  }
+
+	  .sub-nav-item {
+			padding: 5px;
+			background-color: white;
+			color: black;
+		}
+		.sub-nav {
+			background-color: #ccc;
+			border: 1px solid #929eaa;
+		}
+		#content {
+			padding: 10px;
+			border: 1px solid #929eaa;
+		}
+		.btn {
+			border-radius: 0px !important;
+		}
+		.tests_ul {
+			list-style-type: none;
+		}
+		.tests_ul li {
+			list-style-type: none;
+		}
+	</style>
+	<div class="card" style="background-color: #333; border-color: #333;">
+	  <img class="card-img" width="100%" height="350px" src="/images/coffee.png">
+	  <div class="card-img-overlay text-center" style="color: white"><br><br>
+	    <h2 class="card-title">{{name}}</h2>
+	    <p class="card-text">
+			<h5>Time Limit: {{duration}} Minutes</h5>
+			<h5>Available from: <i>{{start}}</i></h5>
+	    </p><br>
+	    <button class="btn btn-lg btn-success">Attempt</button><br><br>
+	    <small>(Timer will start once you proceed and ends after the test duration.)</small>
+	  </div>
+	</div><br>
+	<div class="card card-outline-info mb-3" style="padding:20px">
+	  <div class="card-block">
+	    <blockquote class="card-blockquote">
+	      <p class="description"></p>
+	    </blockquote>
+	  </div>
+	</div>
+	<div class="card card-outline-info mb-3" style="padding:20px">
+	  <div class="card-block">
+	    <blockquote class="card-blockquote">
+	      <p class="grading"></p>
+	    </blockquote>
+	  </div>
+	</div>
+	<div class="card card-outline-info mb-3" style="padding:20px">
+	  <div class="card-block">
+	    <blockquote class="card-blockquote">
+	      <p class="instructions"></p>
+	    </blockquote>
+	  </div>
+	</div>
+	<!-- <h3>About</h3><hr>
+	<div class="description"></div>
+	<h3>Grading</h3><hr>
+	<div class="grading"></div>
+	<h3>Instructions</h3><hr>	
+	<div class="instructions"></div> -->
+	
+<!-- Tab panes -->
+<div class="tab-content">
+  <!-- Questions -->
+  <div role="tabpanel" class="tab-pane fade" id="questions"><br>
+	<div style="padding: 10px;">
+		<a href="/create_question/{{identity}}" class="btn btn-success float-right">Create Question</a>
+	</div><br><br>
+	<div id="content">
+		<table id="questions_table" class="display" width="100%"></table>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var jqxhr = $.post( "/load_questions/{{identity}}", function(res) {
+				tests = JSON.parse(res)
+			    $('#questions_table').DataTable( {
+			        data: tests,
+			        columns: [
+			            { title: "Question ID" },
+			            { title: "Name" },
+			            { title: "Languages" },
+			            { title: "Marks" }
+			        ],
+					retrieve: true,
+			        paging: false
+			    });
+			})
+			.fail(function() {
+				$("#content").html( "<p class='float-center'>Error in fetching the data.</p>" );
+			})
+		});
+	</script>
+  </div>
+  
+  <!-- Invites -->
+  <div role="tabpanel" class="tab-pane fade" id="invites"></div>
+</div>
+<script type="text/javascript">
+	  $.get("/get_description/{{identity}}",function(data){
+    	console.log(data)
+    	$(".description").html(data)
+      })
+      $.get("/get_grading/{{identity}}",function(data){
+    	console.log(data)
+    	$(".grading").html(data)
+      })
+      $.get("/get_instructions/{{identity}}",function(data){
+    	console.log(data)
+    	$(".instructions").html(data)
+      })
+</script>
+{% endblock%}

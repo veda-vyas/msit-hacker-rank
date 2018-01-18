@@ -29,7 +29,7 @@ from functools import wraps
 
 IST = pytz.timezone('Asia/Kolkata')
 root = os.path.join(os.path.dirname(os.path.abspath(__file__)))
-
+os.environ['http_proxy'] = ''
 class Auth:
     CLIENT_ID = ('891614416155-5t5babc77fivqfslma1c3u6r2r9fp1o1.apps.googleusercontent.com')
     CLIENT_SECRET = 'UnGr0t5VT0d3l4PLgICkQoy6'
@@ -320,6 +320,19 @@ def edit_test(testid=None, message=None, valid=False):
         else:   
             return redirect(url_for("create_test"))
 
+@app.route('/view_test/<testid>', methods=['GET'])
+@login_required
+def view_test(testid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested view_test without TestID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first() 
+        if test:
+            return render_template("view_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid)
+        else:   
+            return redirect(url_for("error"))
+
 @app.route('/edit_question/<testid>/<qid>', methods=['GET'])
 @login_required
 @admin_login_required
@@ -358,6 +371,20 @@ def edit_description(testid=None, message=None, valid=False):
         else:   
             return redirect(url_for("create_test"))
 
+@app.route('/get_description/<testid>', methods=['GET', 'POST'])
+@login_required
+def get_description(testid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested get_description without TestID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first()
+        if test:
+            if request.method == 'GET':
+                return test.description
+        else:   
+            return ""
+
 @app.route('/edit_grading/<testid>', methods=['GET', 'POST'])
 @login_required
 @admin_login_required
@@ -379,6 +406,20 @@ def edit_grading(testid=None, message=None, valid=False):
         else:   
             return redirect(url_for("create_test"))
 
+@app.route('/get_grading/<testid>', methods=['GET', 'POST'])
+@login_required
+def get_grading(testid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested get_grading without TestID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first()
+        if test:
+            if request.method == 'GET':
+                return test.grading
+        else:   
+            return ""
+
 @app.route('/edit_instructions/<testid>', methods=['GET', 'POST'])
 @login_required
 @admin_login_required
@@ -399,6 +440,20 @@ def edit_instructions(testid=None, message=None, valid=False):
                 return redirect(url_for("edit_test", testid=test.identity , identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid))
         else:   
             return redirect(url_for("create_test"))
+
+@app.route('/get_instructions/<testid>', methods=['GET', 'POST'])
+@login_required
+def get_instructions(testid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested get_instructions without TestID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first()
+        if test:
+            if request.method == 'GET':
+                return test.instructions
+        else:   
+            return ""
 
 @app.route('/edit_statement/<testid>/<qid>', methods=['GET', 'POST'])
 @login_required
@@ -814,6 +869,12 @@ def logout():
 def send_stylesheets(path):
     app.logger.info("seeking for %s from %s at %s"%(path, request.headers.get('X-Forwarded-For', request.remote_addr), datetime.now()))
     return send_from_directory(root+"/styles", path)
+
+@app.route('/images/<path:path>')
+@login_required
+def send_images(path):
+    app.logger.info("seeking for %s from %s at %s"%(path, request.headers.get('X-Forwarded-For', request.remote_addr), datetime.now()))
+    return send_from_directory(root+"/images", path)
 
 @app.route('/scripts/<path:path>')
 @login_required

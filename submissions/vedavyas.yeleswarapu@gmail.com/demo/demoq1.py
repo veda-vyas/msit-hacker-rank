@@ -1,2 +1,1 @@
-
-print raw_inpu()
+print raw_input()
