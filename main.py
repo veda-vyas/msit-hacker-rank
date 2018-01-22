@@ -109,6 +109,13 @@ class Question(db.Model):
     marks = db.Column(db.Integer)
     languages = db.Column(db.Text, default="Python")
 
+class Enrollments(db.Model):
+    __tablename__ = "enrollments"
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), nullable=False)
+    testid = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, default=datetime.now(IST))
+
 class Activity(db.Model):
     __tablename__ = "activity"
     id = db.Column(db.Integer, primary_key=True)
@@ -176,6 +183,90 @@ def load_tests():
         return json.dumps(tests_arr)
     except Exception as e:
         app.logger.info("Error in load_tests: "+str(e))
+        return render_template('error.html')
+
+@app.route('/load_students', methods=['POST'])
+@app.route('/load_students/<id>', methods=['POST'])
+@login_required
+@admin_login_required
+def load_students(id=None):
+    try:
+        if not id:
+            # tests = Test.query.filter(Test.name=="xyz").all()
+            students = User.query.all()
+            students_arr = []
+            for student in students:
+                students_arr.append([
+                    student.email, student.name, False 
+                ])
+            return json.dumps(students_arr)
+        else:
+            students = User.query.all()
+            students_arr = []
+            enrolled = Enrollments.query.with_entities(Enrollments.email).filter(Enrollments.testid==id).all()
+            app.logger.info(enrolled)
+            enrollments = []
+            for i in enrolled:
+                enrollments.append(i[0])
+            for student in students:
+                if student.email in enrollments:
+                    students_arr.append([
+                        student.email, student.name, "<a href='/invite/"+student.email+"/"+id+"' class='btn btn-sm btn-warning'>Uninvite</a>" 
+                    ])
+                else:
+                    students_arr.append([
+                        student.email, student.name, "<a href='/invite/"+student.email+"/"+id+"' class='btn btn-sm btn-secondary'>Invite</a>" 
+                    ])
+            return json.dumps(students_arr)
+
+    except Exception as e:
+        app.logger.info("Error in load_students: "+str(e))
+        return render_template('error.html')
+
+@app.route('/invite/<email>/<testid>', methods=['GET'])
+@login_required
+@admin_login_required
+def invite(email=None, testid=None):
+    try:
+        if testid == None:
+            app.logger.info("requested invite without TestID: "+str(e))
+            return redirect(url_for('admin')) 
+        if email == None:
+            app.logger.info("requested invite without email: "+str(e))
+            return redirect(url_for('admin')) 
+        else:
+            enrollment = Enrollments.query.filter_by(email=email,testid=testid).all()
+            if len(enrollment)==0:
+                enrollment = Enrollments(email=email,testid=testid)
+                db.session.add(enrollment)
+                db.session.commit()
+            else:
+                for i in enrollment:
+                    db.session.delete(i)
+                db.session.commit()
+            return redirect(url_for("edit_test", testid=testid))
+
+    except Exception as e:
+        app.logger.info("Error in invite: "+str(e))
+        return render_template('error.html')
+
+@app.route('/invite_all/<testid>', methods=['GET'])
+@login_required
+@admin_login_required
+def invite_all(testid=None):
+    try:
+        if testid == None:
+            app.logger.info("requested invite_all without TestID: "+str(e))
+            return redirect(url_for('admin')) 
+        else:
+            users = User.query.all()
+            for user in users:
+                invite(user.email,testid)
+
+            return redirect(url_for("edit_test", testid=testid))
+
+    except Exception as e:
+        app.logger.info("Error in invite_all: "+str(e))
         return render_template('error.html')
 
 @app.route('/load_questions/<testid>', methods=['POST'])
@@ -771,12 +862,15 @@ def createtestcase(testid=None,qid=None):
         content = request.form['content']
 
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        tmp_path = 'testcases/'+testid+'/'+qid+'/'+filename
+        tmp_path = 'testcases/'+testid+'/'+qid
         directory = os.path.join(BASE_DIR, tmp_path)
         
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
         if request.method == "POST":
             if '.txt' in filename and content != "":
-                with open(directory, "wb") as f:
+                with open(directory+'/'+filename, "wb") as f:
                     f.write(content)
             else:
                 return "Error in one or more form fields."

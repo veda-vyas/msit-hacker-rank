@@ -386,7 +386,37 @@
   </div>
   
   <!-- Invites -->
-  <div role="tabpanel" class="tab-pane fade" id="invites"></div>
+  <div role="tabpanel" class="tab-pane fade" id="invites">
+  	<div style="padding: 10px;">
+  		<h3>List of Enrolled Studets</h3>
+		<a href="/invite_all/{{identity}}" class="btn btn-sm btn-secondary float-left">Invite/Uninvite All</a>
+	</div><br><br>
+	<div id="invitescontent">
+		<table id="students_table" class="display" width="100%"></table>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var jqxhr = $.post( "/load_students/{{identity}}", function(res) {
+				students = JSON.parse(res)
+			    $('#students_table').DataTable({
+			        data: students,
+			        columns: [
+			            { title: "Email Address" },
+			            { title: "Name" },
+			            { title: "Invited" }
+			        ],
+					retrieve: true,
+			        paging: false
+			    });
+			})
+			.fail(function() {
+				$("#invitescontent").html( "<p class='float-center'>Error in fetching the data.</p>" );
+			})
+		});
+	</script>
+  </div>
+
 </div>
 <script type="text/javascript">
 	var editors = [];
