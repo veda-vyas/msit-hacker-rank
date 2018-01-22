@@ -118,7 +118,7 @@
 	    <a class="nav-link" id="editor_trigger" href="#code" role="tab" data-toggle="tab">Code Editor</a>
 	  </li>
 	  <li class="nav-item">
-	    <a class="nav-link" href="#testcases" role="tab" data-toggle="tab">Testcases</a>
+	    <a class="nav-link" id="testcases_trigger" href="#testcases" role="tab" data-toggle="tab">Testcases</a>
 	  </li>
 	  <li class="nav-item">
 	    <a class="nav-link" href="#languages" role="tab" data-toggle="tab">Languages</a>
@@ -448,9 +448,18 @@
   	</div>
   </div>
 	<script type="text/javascript">
-		if("{{ request.args.get('show_editor') }}"){
-			$('#editor_trigger').trigger('click')
-		}
+		$(function(){
+			if("{{ request.args.get('show_editor') }}"){
+				$('#editor_trigger').trigger('click')
+			}
+			else if("{{ request.args.get('show_testcases') }}"){
+				$('#testcases_trigger').trigger('click')
+			}
+			else{
+				$('#details_trigger').trigger('click')
+			}	
+		});
+
 		var editor = ace.edit("code_{{identity}}");
 	    editor.setTheme("ace/theme/monokai");
 	    editor.getSession().setMode("ace/mode/python");
@@ -477,13 +486,83 @@
 		    form.target = '_blank';
 		    form.submit();
 		}
+
 		// $("#form_code").bind('ajax:complete', function(data) {
 	 //    	$("#output_code").html(data)
 	 //    });
 	</script>
 
   <!-- Testcases -->
-  <div role="tabpanel" class="tab-pane fade" id="testcases"></div>
+  <div role="tabpanel" class="tab-pane fade" id="testcases"><br>
+  	<button type="button" id="createtestcase" class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal">
+	  Create Testcase
+	</button><br><br>
+  	<div class="testcases_div"></div>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	    <form method="POST" id="createtc" action="/createtestcase/{{testid}}/{{identity}}">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="form-group">
+				<label for="filename">Enter Filename</label>
+				<input type="text" class="form-control" id="filename" name="filename" required>
+			</div>
+			<div class="form-group">
+				<label for="content">Enter Content</label>
+				<input type="textarea" class="form-control" id="content" name="content" required>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="submit" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </form>
+	    </div>
+	  </div>
+	</div>
+  	<script type="text/javascript">
+  		$('#createtestcase').click(function(){
+  			$('#myModal').modal('toggle');
+  		})
+  		$('#myModal').on('shown.bs.modal', function () {
+		  $('#myInput').focus()
+		})
+
+  		$.get("/gettestcases/{{testid}}/{{identity}}",function(data){
+	    	data = JSON.parse(data)
+	    	for(var i=0; i<data.inputs.length; i++){
+	    		(function(i){
+			    	$.get("/get_content", {"filename":data.inputs[i]}, function(content){
+		    			filename = data.inputs[i].split("/").slice(-1)[0]
+		    			$(".testcases_div").append('<form action="/savetestcase/{{testid}}/{{identity}}/'+filename+'" method="POST">\
+		<div class="form-group">\
+		  <h4>'+filename+'</h4>\
+		  <input type="textarea" name="content" value="'+content+'" style="width: -webkit-fill-available;">\
+		  <br><br><input type="submit" class="btn btn-primary btn-sm float-left" value="Save Changes"><br>\
+		</div>\
+	</form><br>');
+		    		})
+		    		$.get("/get_content", {"filename":data.outputs[i]}, function(content){
+		    			filename = data.outputs[i].split("/").slice(-1)[0]
+		    			$(".testcases_div").append('<form action="/savetestcase/{{testid}}/{{identity}}/'+filename+'" method="POST">\
+		<div class="form-group">\
+		  <h4>'+filename+'</h4>\
+		  <input type="textarea" name="content" value="'+content+'" style="width: -webkit-fill-available;">\
+		  <br><br><input type="submit" class="btn btn-primary btn-sm float-left" value="Save Changes"><br>\
+		</div>\
+	</form><br>');
+		    		})
+	    		})(i);
+	    	}
+	    })
+  	</script>
+  </div>
   
   <!-- Languages -->
   <div role="tabpanel" class="tab-pane fade" id="languages"></div>

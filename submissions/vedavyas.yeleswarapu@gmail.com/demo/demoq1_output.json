@@ -1,1 +1,1 @@
-[{"output": "", "error": "Input: hello\n \nExpected: hello \nYour Output: hello"}, {"output": "", "error": "Input: hello\n \nExpected: hell \nYour Output: hello"}]
+[{"output": "pass", "error": ""}, {"output": "pass", "error": ""}, {"output": "fail", "error": "Input: hello \nExpected: hell \nYour Output: hello"}]

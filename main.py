@@ -563,10 +563,12 @@ def edit_constraints(testid=None, qid=None, message=None, valid=False):
         else:   
             return redirect(url_for("create_question"))
 
-@app.route('/get_content/<filename>', methods=['GET'])
+@app.route('/get_content', methods=['GET'])
 @login_required
 @admin_login_required
-def get_content(filename):
+def get_content(filename=None):
+    if not filename:
+        filename = request.args.get("filename")
     content = ""
     with open(filename, "rb") as f:
         content = f.read()
@@ -612,12 +614,12 @@ def evalcode(execution_path,inputs,outputs,timeout):
             expected_output = expected_output.replace('\r','').rstrip()
 
             if your_output == expected_output:
-                out,err = "","Input: "+given_input+" \nExpected: "+expected_output+" \nYour Output: "+your_output
+                out,err = "pass", ""
                 # out,err = "Testcase Passed.", ""
             elif err:
                 out,err = your_output,err
             else:
-                out,err = "","Input: "+given_input+" \nExpected: "+expected_output+" \nYour Output: "+your_output
+                out,err = "fail","Input: "+given_input+" \nExpected: "+expected_output+" \nYour Output: "+your_output
             
             results[index]['output'] = out
             results[index]['error'] = err
@@ -691,7 +693,7 @@ def getcode(testid=None,qid=None):
 
             return "Could not fetch the code. Try submitting again."
 
-@app.route('/gettestcases/<testid>/<qid>', methods=['POST'])
+@app.route('/gettestcases/<testid>/<qid>', methods=['GET','POST'])
 @login_required
 @admin_login_required
 def gettestcases(testid=None,qid=None):
@@ -702,27 +704,84 @@ def gettestcases(testid=None,qid=None):
         app.logger.info("requested gettestcases without QuestionID: "+str(e))
         return redirect(url_for('admin'))
     else:
-        if request.method == "POST":
-            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-            tmp_path = 'testcases/'+testid+'/'+qid
-            directory = os.path.join(BASE_DIR, tmp_path)
-            
-            inputs = []
-            outputs = []
-            
-            if os.path.exists(directory):
-                for root,dirs,files in os.walk(directory):
-                    for file in files:
-                        if 'input' in file and '.txt' in file:
-                            inputs.append(directory+"/"+file)
-                        if 'output' in file and '.txt' in file:
-                            outputs.append(directory+"/"+file)
-                    break
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        tmp_path = 'testcases/'+testid+'/'+qid
+        directory = os.path.join(BASE_DIR, tmp_path)
+        
+        inputs = []
+        outputs = []
+        
+        if os.path.exists(directory):
+            for root,dirs,files in os.walk(directory):
+                for file in files:
+                    if 'input' in file and '.txt' in file:
+                        inputs.append(directory+"/"+file)
+                    if 'output' in file and '.txt' in file:
+                        outputs.append(directory+"/"+file)
+                break
 
-            inputs = sorted(inputs)
-            outputs = sorted(outputs)
-            
+        inputs = sorted(inputs)
+        outputs = sorted(outputs)
+
+        if request.method == "POST":
             return inputs,outputs
+        elif request.method == "GET":
+            obj = {}
+            obj['inputs'] = inputs
+            obj['outputs'] = outputs
+            return json.dumps(obj)
+
+@app.route('/savetestcase/<testid>/<qid>/<filename>', methods=['GET','POST'])
+@login_required
+@admin_login_required
+def savetestcase(testid=None,qid=None,filename=None):
+    if testid == None:
+        app.logger.info("requested savetestcase without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested savetestcase without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    if filename == None:
+        app.logger.info("requested savetestcase without filename: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        tmp_path = 'testcases/'+testid+'/'+qid+'/'+filename
+        directory = os.path.join(BASE_DIR, tmp_path)
+        
+        if request.method == "POST":
+            if request.form['content'] != "":
+                with open(directory, "wb") as f:
+                    f.write(request.form['content'])
+
+            return redirect(url_for("edit_question", testid=testid , qid=qid, show_testcases=True))
+
+@app.route('/createtestcase/<testid>/<qid>', methods=['GET','POST'])
+@login_required
+@admin_login_required
+def createtestcase(testid=None,qid=None):
+    if testid == None:
+        app.logger.info("requested createtestcase without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    if qid == None:
+        app.logger.info("requested createtestcase without QuestionID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        filename = request.form['filename']
+        content = request.form['content']
+
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        tmp_path = 'testcases/'+testid+'/'+qid+'/'+filename
+        directory = os.path.join(BASE_DIR, tmp_path)
+        
+        if request.method == "POST":
+            if '.txt' in filename and content != "":
+                with open(directory, "wb") as f:
+                    f.write(content)
+            else:
+                return "Error in one or more form fields."
+
+            return redirect(url_for("edit_question", testid=testid , qid=qid, show_testcases=True))
 
 @app.route('/submitcode/<testid>/<qid>', methods=['POST'])
 @login_required
