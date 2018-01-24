@@ -106,17 +106,82 @@
 	  <img class="card-img" width="100%" height="350px" src="/images/coffee.png">
 	  <div class="card-img-overlay text-center" style="color: white"><br><br>
 	    <h2 class="card-title">{{name}}</h2>
-	    <p class="card-text">
-			<h5>Time Limit: {{duration}} Minutes</h5>
-			<h5>Available from: <i>{{start}}</i></h5>
-	    </p><br>
-	    <button class="btn btn-lg btn-success">Attempt</button><br><br>
-	    <small>(Timer will start once you proceed and ends after the test duration.)</small>
+	    {% if d==0 and h==0 and m==0 and s==0 %}
+		    <p class="card-text">
+				<h5>Time Limit: {{duration}} Minutes</h5>
+				<h5>Last date for submissions: <i>{{end}}</i></h5>
+		    </p><br>
+		    <button class="btn btn-lg btn-success">Attempt</button><br><br>
+		    <small>(Timer will start once you proceed and ends after the test duration.)</small>
+		{% else %}
+			<p class="card-text">
+				<br><h4>Starts in</h4>
+		    </p>
+			<div id="timer" style="display: inline-flex; color: black">
+				<div class="d-inline" style="margin: 5px; padding:5px; padding-left:10px; padding-right:10px; background-color: white">
+					<h3 id="days">{{d[0]}}</h3>
+					<h5>days</h5>
+				</div>
+				<div class="d-inline" style="margin: 5px; padding:5px; padding-left:10px; padding-right:10px; background-color: white">
+					<h3 id="hours">{{h}}</h3>
+					<h5>hours</h5>
+				</div>
+				<div class="d-inline" style="margin: 5px; padding:5px; padding-left:10px; padding-right:10px; background-color: white">
+					<h3 id="minutes">{{m}}</h3>
+					<h5>mins</h5>
+				</div>
+				<div class="d-inline" style="margin: 5px; padding:5px; padding-left:10px; padding-right:10px; background-color: white">
+					<h3 id="seconds">{{s}}</h3>
+					<h5>secs</h5>
+				</div>
+			</div>
+			<script type="text/javascript">
+				startTimer();
+
+				function startTimer() {
+					// var presentTime = document.getElementById('timer').innerHTML;
+					// var timeArray = presentTime.split(/[:]+/);
+					var d = document.getElementById('days').innerHTML
+					var h = checkHour(document.getElementById('hours').innerHTML);
+					var m = checkMinute(document.getElementById('minutes').innerHTML);
+					var s = checkSecond((document.getElementById('seconds').innerHTML - 1));
+					if(s==59){m=m-1}
+					if(m==59){h=h-1}
+					if(h==24){d=d-1}
+					if(d<0){
+						location.reload()
+					}
+				  
+					document.getElementById('days').innerHTML = d
+					document.getElementById('hours').innerHTML = h
+					document.getElementById('minutes').innerHTML = m
+					document.getElementById('seconds').innerHTML = s
+				  	setTimeout(startTimer, 1000);
+				}
+
+				function checkSecond(sec) {
+				  if (sec < 10 && sec >= 0) {sec = "0" + sec};
+				  if (sec < 0) {sec = "59"};
+				  return sec;
+				}
+				function checkMinute(min) {
+				  // if (min < 10 && min >= 0) {min = "0" + min};
+				  if (min < 0) {min = "59"};
+				  return min;
+				}
+				function checkHour(hour) {
+				  // if (hour < 10 && hour >= 0) {hour = "0" + hour};che
+				  if (hour < 0) {hour = "24"};
+				  return hour;
+				}
+			</script>
+	  	{% endif %}
 	  </div>
 	</div><br>
 	<div class="card card-outline-info mb-3" style="padding:20px">
 	  <div class="card-block">
 	    <blockquote class="card-blockquote">
+	      <h2>Description</h2><hr>
 	      <p class="description"></p>
 	    </blockquote>
 	  </div>
@@ -124,6 +189,7 @@
 	<div class="card card-outline-info mb-3" style="padding:20px">
 	  <div class="card-block">
 	    <blockquote class="card-blockquote">
+	      <h2>Grading</h2><hr>
 	      <p class="grading"></p>
 	    </blockquote>
 	  </div>
@@ -131,6 +197,7 @@
 	<div class="card card-outline-info mb-3" style="padding:20px">
 	  <div class="card-block">
 	    <blockquote class="card-blockquote">
+	      <h2>Instructions</h2><hr>
 	      <p class="instructions"></p>
 	    </blockquote>
 	  </div>

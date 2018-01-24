@@ -70,7 +70,8 @@ login_manager = LoginManager(app)
 login_manager.login_view = "login"
 login_manager.session_protection = "strong"
 ADMINS = ['vedavyas.yeleswarapu@gmail.com']
-
+app.jinja_env.globals['datetime'] = datetime
+app.jinja_env.globals['timedelta'] = timedelta
 #from werkzeug.serving import make_ssl_devcert
 #make_ssl_devcert('./ssl', host='localhost')
 
@@ -86,7 +87,7 @@ class User(db.Model, UserMixin):
 class Test(db.Model):
     __tablename__ = "test"
     id = db.Column(db.Integer, primary_key=True)
-    identity = db.Column(db.String(5), unique=True)
+    identity = db.Column(db.Text, unique=True)
     name = db.Column(db.Text)
     no_of_questions = db.Column(db.Integer)
     start = db.Column(db.DateTime, default=datetime.now(IST))
@@ -99,8 +100,8 @@ class Test(db.Model):
 class Question(db.Model):
     __tablename__ = "question"
     id = db.Column(db.Integer, primary_key=True)
-    identity = db.Column(db.String(10), unique=True)
-    testid = db.Column(db.String(5))
+    identity = db.Column(db.Text, unique=True)
+    testid = db.Column(db.Text)
     name = db.Column(db.Text)
     statement = db.Column(db.Text)
     input_format = db.Column(db.Text)
@@ -304,24 +305,19 @@ def create_test(message=None, valid=None):
         try:
             f = request.form
             name = f["name"]
-            id = f["id"]
+            id = f["name"]
             start = datetime.strptime(f["start"], "%d-%m-%Y %H:%M")
             end = datetime.strptime(f["end"], "%d-%m-%Y %H:%M")
             no_of_questions = f["no_of_questions"]
             duration = f["duration"]
             tests = Test.query.filter(Test.identity==id).all()
             if len(tests) == 0:
-                if len(id) <= 5:
-                    new_test = Test(identity=id,name=name,no_of_questions=no_of_questions,start=start,end=end,duration=duration)
-                    db.session.add(new_test)
-                    db.session.commit()
-                    message = "Successfully created the test."
-                    valid = True
-                    return redirect(url_for("admin"))
-                else:
-                    message = "Please choose a TestID which is <=5 characters"
-                    valid = False    
-                    return redirect(url_for("create_test", message=message, valid=valid))
+                new_test = Test(identity=id,name=name,no_of_questions=no_of_questions,start=start,end=end,duration=duration)
+                db.session.add(new_test)
+                db.session.commit()
+                message = "Successfully created the test."
+                valid = True
+                return redirect(url_for("admin"))
             else:
                 existing_test = tests[0]
 
@@ -333,7 +329,7 @@ def create_test(message=None, valid=None):
                 existing_test.duration = duration 
                 db.session.commit()
                 
-                message = "Test ID already exists. Existing Test ("+id+") updated."
+                message = "Test already exists. Existing Test ("+id+") updated."
                 valid = True
 
                 return redirect(url_for("edit_test", testid=id, message=message, valid=valid))
@@ -359,7 +355,7 @@ def create_question(testid=None, message=None, valid=None):
             try:
                 f = request.form
                 name = f["name"]
-                id = f["id"]
+                id = f["name"]
                 statement = ""
                 input_format = ""
                 output_format= ""
@@ -367,15 +363,11 @@ def create_question(testid=None, message=None, valid=None):
                 marks = f['marks']
                 questions = Question.query.filter(Question.identity==id,Question.testid==testid).all()
                 if len(questions) == 0:
-                    if len(id) <= 10:
-                        new_question = Question(identity=id,testid=testid,name=name,statement=statement,input_format=input_format,output_format=output_format,constraints=constraints,marks=marks)
-                        db.session.add(new_question)
-                        db.session.commit()
-                        message = "Successfully created a question."
-                        valid = True
-                    else:
-                        message = "Please choose a QuestionID which is <=10 characters"
-                        valid = False    
+                    new_question = Question(identity=id,testid=testid,name=name,statement=statement,input_format=input_format,output_format=output_format,constraints=constraints,marks=marks)
+                    db.session.add(new_question)
+                    db.session.commit()
+                    message = "Successfully created a question."
+                    valid = True 
                     return redirect(url_for("create_question", testid=testid, message=message, valid=valid))
                 else:
                     existing_question = questions[0]
@@ -389,7 +381,7 @@ def create_question(testid=None, message=None, valid=None):
                     existing_question.marks = marks 
                     db.session.commit()
                     
-                    message = "Question ID already exists. Existing Question ("+id+") updated."
+                    message = "Question already exists. Existing Question ("+id+") updated."
                     valid = True
 
                     return redirect(url_for("create_question", testid=testid, message=message, valid=valid))
@@ -420,7 +412,21 @@ def view_test(testid=None, message=None, valid=False):
     else:
         test = Test.query.filter(Test.identity==testid).first() 
         if test:
-            return render_template("view_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid)
+            now = datetime.now()
+            if now >= test.start:
+                show_timer = False
+                d = 0
+                h = 0
+                m = 0
+                s = 0
+            else:
+                show_timer = True
+                td = test.start-now
+                d = td.days, 
+                h = td.seconds//3600
+                m = (td.seconds//60)%60
+                s = 00
+            return render_template("view_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid, d=d, h=h, m=m, s=s)
         else:   
             return redirect(url_for("error"))
 
@@ -931,7 +937,11 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                         output = json.dumps(output)
                     else:
                         output,err = "","An instance of your previous execution is still running. Please email <vy[at]fju[dot]us>."
-                
+                    
+                    ts = time.time()
+                    with open(directory+"/"+qid+"_"+str(ts)+".py", "wb") as f1:
+                        f1.write(code)
+
                 with open(directory+"/"+qid+"_output.json", "wb") as f:
                     if output == "":
                         f.write(err)
