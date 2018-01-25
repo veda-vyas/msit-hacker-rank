@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}HackerRank - Edit Test{% endblock %}
+{% block title %}HackerRank - View Test{% endblock %}
 {% block body %}
 	<style type="text/css">
 		.sub-nav-item {
@@ -111,7 +111,7 @@
 				<h5>Time Limit: {{duration}} Minutes</h5>
 				<h5>Last date for submissions: <i>{{end}}</i></h5>
 		    </p><br>
-		    <button class="btn btn-lg btn-success">Attempt</button><br><br>
+		    <a href="/attempt_test/{{name}}" class="btn btn-lg btn-success">Attempt</a><br><br>
 		    <small>(Timer will start once you proceed and ends after the test duration.)</small>
 		{% else %}
 			<p class="card-text">

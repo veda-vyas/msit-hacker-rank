@@ -150,6 +150,24 @@ def admin_login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def enrolled(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        testid = kwargs['testid']
+        test = Test.query.filter(Test.identity==testid).first()
+        enrolled = Enrollments.query.filter(Enrollments.testid==testid, Enrollments.email==session['email']).first()
+        if not enrolled:
+            now=datetime.now()
+            show_timer = True
+            td = test.start-now
+            d = td.days, 
+            h = td.seconds//3600
+            m = (td.seconds//60)%60
+            s = 00
+            return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, d=d, h=h, m=m, s=s, next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/')
 @login_required
 def index():
@@ -427,6 +445,45 @@ def view_test(testid=None, message=None, valid=False):
                 m = (td.seconds//60)%60
                 s = 00
             return render_template("view_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid, d=d, h=h, m=m, s=s)
+        else:   
+            return redirect(url_for("error"))
+
+@app.route('/attempt_test/<testid>', methods=['GET'])
+@login_required
+@enrolled
+def attempt_test(testid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested attempt_test without TestID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first()
+        enrolled = Enrollments.query.filter(Enrollments.testid==testid, Enrollments.email==session['email']).first()
+        questions = Question.query.filter(Question.testid==testid).all()
+        qarr = []
+        for question in questions:
+            qarr.append(question.identity)
+
+        if test and enrolled:
+            now = datetime.now()
+            if now >= test.start:
+                # flash(test.duration)
+                duration = test.duration
+                hours = 0
+                minutes = 0
+                seconds = 0
+                while duration > 60:
+                    duration = duration - 60
+                    hours = hours+1
+                minutes = duration
+                return render_template("attempt_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, questions=qarr, hours=hours, minutes=minutes)
+            else:
+                show_timer = True
+                td = test.start-now
+                d = td.days, 
+                h = td.seconds//3600
+                m = (td.seconds//60)%60
+                s = 00
+                return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid, d=d, h=h, m=m, s=s))
         else:   
             return redirect(url_for("error"))
 
