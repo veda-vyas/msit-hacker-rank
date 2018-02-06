@@ -91,7 +91,7 @@
 
     <nav aria-label="breadcrumb" role="navigation">
 	  <ol class="breadcrumb">
-	    <li class="breadcrumb-item"><a href="/view_test/{{testid}}">Instructions</a></li>
+	    <li class="breadcrumb-item"><a href="/view_test/{{identity}}">Instructions</a></li>
 	    <li class="breadcrumb-item active" aria-current="page">Questions</li>
 	  </ol>
 	</nav>
@@ -102,7 +102,23 @@
     <div class="row">
     	<div class="col-md-9">
         	{% for question in questions %}
-            	<li><a class="active" href="#{{question}}" data-toggle="tab">{{question}}</a></li>
+        		<div class="card card-outline-success mb-3">
+			  		<div class="card-block" style="padding: 10px;">
+			  			<div class="row">
+			  				<div class="col-md-12 text-left">
+			  					<h4><i class="fa fa-close mx-3" aria-hidden="true" style="color: red"></i>{{question.id}}</h4>
+			  				</div>
+			  			</div>
+			  			<div class="row text-left">
+			  				<div class="col-md-2"><br>Difficulty: Hard</div>
+			  				<div class="col-md-2"><br>Marks: {{question.marks}}</div>
+			  				<div class="col-md-4"></div>
+			  				<div class="col-md-4 text-right">
+			  					<button class="btn btn-success">Attempt Question</button>
+			  				</div>
+			  			</div>
+			  		</div>
+			  	</div>
     		{% endfor %}
     	</div>
     	<div class="col-md-3">
@@ -119,7 +135,7 @@
 						<h5>mins</h5>
 					</div>
 					<div class="d-inline" style="margin: 5px; padding:5px; padding-left:10px; padding-right:10px; background-color: white">
-						<h3 id="seconds">00</h3>
+						<h3 id="seconds">{{seconds}}</h3>
 						<h5>secs</h5>
 					</div>
 				</div>
@@ -145,5 +161,37 @@
 		    
 		  $(init);
 		})();
+
+		startTimer();
+
+		function startTimer() {
+			var h = checkHour(document.getElementById('hours').innerHTML);
+			var m = checkMinute(document.getElementById('minutes').innerHTML);
+			var s = checkSecond((document.getElementById('seconds').innerHTML - 1));
+			if(s==59){m=m-1}
+			if(m==59){h=h-1}
+			if(m<0){
+				location.reload()
+			}
+		  
+			document.getElementById('hours').innerHTML = h
+			document.getElementById('minutes').innerHTML = m
+			document.getElementById('seconds').innerHTML = s
+		  	setTimeout(startTimer, 1000);
+		}
+
+		function checkSecond(sec) {
+		  if (sec < 10 && sec >= 0) {sec = "0" + sec};
+		  if (sec < 0) {sec = "59"};
+		  return sec;
+		}
+		function checkMinute(min) {
+		  if (min < 0) {min = "59"};
+		  return min;
+		}
+		function checkHour(hour) {
+		  if (hour < 0) {hour = "24"};
+		  return hour;
+		}
     </script>
 {% endblock%}

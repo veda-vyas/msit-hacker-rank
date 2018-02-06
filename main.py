@@ -116,6 +116,8 @@ class Enrollments(db.Model):
     email = db.Column(db.String(100), nullable=False)
     testid = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.now(IST))
+    attempted = db.Column(db.Boolean, default=False)
+    endtime = db.Column(db.DateTime)
 
 class Activity(db.Model):
     __tablename__ = "activity"
@@ -165,6 +167,7 @@ def enrolled(f):
             m = (td.seconds//60)%60
             s = 00
             return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, d=d, h=h, m=m, s=s, next=request.url))
+        
         return f(*args, **kwargs)
     return decorated_function
 
@@ -461,7 +464,10 @@ def attempt_test(testid=None, message=None, valid=False):
         questions = Question.query.filter(Question.testid==testid).all()
         qarr = []
         for question in questions:
-            qarr.append(question.identity)
+            q = {}
+            q['id'] = question.identity
+            q['marks'] = question.marks
+            qarr.append(q)
 
         if test and enrolled:
             now = datetime.now()
@@ -475,7 +481,35 @@ def attempt_test(testid=None, message=None, valid=False):
                     duration = duration - 60
                     hours = hours+1
                 minutes = duration
-                return render_template("attempt_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, questions=qarr, hours=hours, minutes=minutes)
+
+                # if enrolled.endtime < datetime.now(IST):
+                #     return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration))
+                endtime = None
+                if not enrolled.attempted:
+                    enrolled.attempted = True
+                    endtime = datetime.now(IST) + timedelta(minutes=minutes)
+                    enrolled.endtime = endtime
+                    db.session.commit()
+                    td = enrolled.endtime-now
+                    h = td.seconds//3600
+                    m = (td.seconds//60)%60
+                    s = td.seconds%60
+                    app.logger.info(s)
+                    return render_template("attempt_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, questions=qarr, hours=h, minutes=m, seconds=s, endtime=endtime)
+                else:
+                    if enrolled.endtime:
+                        if enrolled.endtime > now:
+                            td = enrolled.endtime-now
+                            h = td.seconds//3600
+                            m = (td.seconds//60)%60
+                            s = td.seconds%60
+                            app.logger.info(s)
+                            return render_template("attempt_test.html", identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, questions=qarr, hours=h, minutes=m, seconds=s, endtime=endtime)
+                        else:
+                            # show results page
+                            return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration))
+                    else:
+                        return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration))
             else:
                 show_timer = True
                 td = test.start-now
