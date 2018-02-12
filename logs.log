@@ -1,81 +1,97 @@
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 18:23:14.205962
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 18:23:14.607381
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-06 18:23:26.221408
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-06 18:23:26.255721
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-06 18:23:26.274182
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-06 18:23:26.291403
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-06 18:23:26.308168
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 18:23:26.338618
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 18:23:26.470748
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-06 18:23:33.314486
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-06 18:23:33.345025
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-06 18:23:33.372810
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-06 18:23:33.402279
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-06 18:23:33.422909
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 18:23:33.442423
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 18:23:33.514167
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-06 18:25:38.165034
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-06 18:25:38.209808
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-06 18:25:38.227848
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-06 18:25:38.239228
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-06 18:25:38.249524
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 18:25:38.259543
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 18:25:38.848361
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-06 18:25:51.030953
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-06 18:25:51.119539
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-06 18:25:51.149454
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-06 18:25:51.168224
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-06 18:25:51.187467
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 18:25:51.198610
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 18:25:51.254247
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-06 18:27:31.223549
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-06 18:27:31.260752
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-06 18:27:31.295691
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-06 18:27:31.321453
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-06 18:27:31.332038
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 18:27:31.341921
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 18:27:31.722977
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
+2018-02-12 22:18:20.616049
+2018-02-12 21:23:02.682156
+0:55:17.933893
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
+2018-02-12 22:18:20.616049
+2018-02-12 21:23:29.143263
+0:54:51.472786
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
+2018-02-12 22:18:20.616049
+2018-02-12 21:24:34.519616
+0:53:46.096433
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
+2018-02-12 22:18:20.616049
+2018-02-12 21:24:57.996990
+0:53:22.619059
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
+2018-02-12 22:18:20.616049
+2018-02-12 21:25:11.961017
+0:53:08.655032
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
+2018-02-12 22:18:20.616049
+2018-02-12 21:25:34.813493
+0:52:45.802556
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
+2018-02-12 22:18:20.616049
+2018-02-12 21:26:25.076866
+0:51:55.539183
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
+Test Running Code: # Seems like you haven't written any code yet.
+print "helo"*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+2018-02-12 22:18:20.616049
+2018-02-12 21:26:36.748548
+0:51:43.867501
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helohelohelohelohelo", "error": "Outputs Mismatch"}}]
+Test Running Code: # Seems like you haven't written any code yet.
+print "helo "*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+2018-02-12 22:18:20.616049
+2018-02-12 21:26:59.827384
+0:51:20.788665
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo helo helo helo helo", "error": "Outputs Mismatch"}}]
+Test Running Code: # Seems like you haven't written any code yet.
+print "hello "*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+2018-02-12 22:18:20.616049
+2018-02-12 21:27:21.137459
+0:50:59.478590
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+2018-02-12 22:18:20.616049
+2018-02-12 21:27:46.278777
+0:50:34.337272
 [(u'vedavyas.yeleswarapu@gmail.com',)]
-[]
-[(u'vedavyas.yeleswarapu@gmail.com',)]
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 18:41:32.955637
-0
-31
-29
-27
-26
-25
-24
-23
-22
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 18:51:38.406269
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-06 19:29:17.205416
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-06 19:29:17.263993
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-06 19:29:17.279251
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-06 19:29:17.290163
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-06 19:29:17.314453
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 19:29:17.324484
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 19:29:17.802058
-[(u'vedavyas.yeleswarapu@gmail.com',)]
-[]
-[(u'vedavyas.yeleswarapu@gmail.com',)]
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 19:29:51.439882
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-06 19:47:45.655874
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-06 19:47:45.676855
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-06 19:47:45.693656
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-06 19:47:45.703665
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-06 19:47:45.717874
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 19:47:45.730785
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 19:47:46.149658
-[(u'vedavyas.yeleswarapu@gmail.com',)]
-[]
-[(u'vedavyas.yeleswarapu@gmail.com',)]
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 19:48:06.653685
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-06 19:50:25.774983
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-06 19:50:25.810528
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-06 19:50:25.842855
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-06 19:50:25.852998
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-06 19:50:25.863247
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-06 19:50:25.875242
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 19:50:36.026106
-seeking for coffee.png from 127.0.0.1 at 2018-02-06 19:51:25.010381
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-12 21:32:08.701133
+seeking for richtexteditor.js from 127.0.0.1 at 2018-02-12 21:32:08.720500
+seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-12 21:32:08.745783
+seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-12 21:32:08.765022
+seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-12 21:32:08.776698
+seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-12 21:32:08.786679
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+question statement
+Test Running Code: # Seems like you haven't written any code yet.
+print "hello "*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+question statement
+Submitting Code: # Seems like you haven't written any code yet.
+print "hello "*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+question statement
+Test Running Code: # Seems like you haven't written any code yet.
+print "hello "*6
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "hello hello hello hello hello hello", "error": "Outputs Mismatch"}}]
+question statement
+Submitting Code: # Seems like you haven't written any code yet.
+print "hello "*6
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "hello hello hello hello hello hello", "error": "Outputs Mismatch"}}]
+question statement

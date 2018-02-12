@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}HackerRank - Edit Test{% endblock %}
+{% block title %}HackerRank - Edit Question{% endblock %}
 {% block body %}
 	<style type="text/css">
 		.sub-nav-item {
@@ -436,14 +436,7 @@
 		</div>
 		<div class="col-sm-12 col-md-6"><br>
 			<h4>Output</h4><hr>
-			{% if request.args.get('error') %}
-				<div id="error">{{request.args.get('error')}}</div>
-				<!-- <div id="error_code">{{error}}</div> -->
-			{% endif %}
-			{% if request.args.get('output') %}
-				<div id="output_code">{{request.args.get('output')}}</div>
-				<!-- <div id="error_code">{{error}}</div> -->
-			{% endif %}
+			<div class="output"></div>
 		</div>
   	</div>
   </div>
@@ -486,6 +479,29 @@
 		    form.target = '_blank';
 		    form.submit();
 		}
+
+		$.get("/getoutput/{{testid}}/{{identity}}",function(data){
+			output = JSON.parse(data);
+			if(output[0]['error']){
+				console.log(output)
+				$(".output").append('<pre>Traceback:\n'+output[0]['error']+'</pre>');
+			}
+			else{
+				for(var i=0; i<output.length; i++){
+					testcase = output[i]['output']
+					console.log(Object.keys(testcase));
+					if(testcase.status=="pass"){
+						$(".output").append('<div class="col-md-3">');
+						$(".output").append('<h5 style="color: green">Testcase '+testcase.status+'ed</h5>');
+					}
+					else{
+						$(".output").append('<h5 style="color: red">Testcase '+testcase.status+'ed</h5>');
+						$(".output").append('<p>Input Passed : '+testcase.input+'<br>Expected : '+testcase.expected+'<br>Your Output : '+testcase.actual+'</p>');
+					}
+				}
+			}
+			// $(".constraints").html(data)
+		})
 
 		// $("#form_code").bind('ajax:complete', function(data) {
 	 //    	$("#output_code").html(data)

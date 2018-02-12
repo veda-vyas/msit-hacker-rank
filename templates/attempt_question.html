@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+{% block title %}HackerRank - Attempt Question{% endblock %}
+{% block body %}
+	<style type="text/css">
+		.tabs-left, .tabs-right {
+		  border-bottom: none;
+		  padding-top: 2px;
+		}
+		.tabs-left {
+		  border-right: 1px solid #ddd;
+		}
+		.tabs-right {
+		  border-left: 1px solid #ddd;
+		}
+		.tabs-left>li, .tabs-right>li {
+		  float: none;
+		  margin-bottom: 2px;
+		}
+		.tabs-left>li {
+		  margin-right: -1px;
+		}
+		.tabs-right>li {
+		  margin-left: -1px;
+		}
+		.tabs-left>li.active>a,
+		.tabs-left>li.active>a:hover,
+		.tabs-left>li.active>a:focus {
+		  border-bottom-color: #ddd;
+		  border-right-color: transparent;
+		}
+
+		.tabs-right>li.active>a,
+		.tabs-right>li.active>a:hover,
+		.tabs-right>li.active>a:focus {
+		  border-bottom: 1px solid #ddd;
+		  border-left-color: transparent;
+		}
+		.tabs-left>li>a {
+		  border-radius: 4px 0 0 4px;
+		  margin-right: 0;
+		  display:block;
+		}
+		.tabs-right>li>a {
+		  border-radius: 0 4px 4px 0;
+		  margin-right: 0;
+		}
+		.vertical-text {
+		  margin-top:50px;
+		  border: none;
+		  position: relative;
+		}
+		.vertical-text>li {
+		  height: 20px;
+		  width: 120px;
+		  margin-bottom: 100px;
+		}
+		.vertical-text>li>a {
+		  border-bottom: 1px solid #ddd;
+		  border-right-color: transparent;
+		  text-align: center;
+		  border-radius: 4px 4px 0px 0px;
+		}
+		.vertical-text>li.active>a,
+		.vertical-text>li.active>a:hover,
+		.vertical-text>li.active>a:focus {
+		  border-bottom-color: transparent;
+		  border-right-color: #ddd;
+		  border-left-color: #ddd;
+		}
+		.vertical-text.tabs-left {
+		  left: -50px;
+		}
+		.vertical-text.tabs-right {
+		  right: -50px;
+		}
+		.vertical-text.tabs-right>li {
+		  -webkit-transform: rotate(90deg);
+		  -moz-transform: rotate(90deg);
+		  -ms-transform: rotate(90deg);
+		  -o-transform: rotate(90deg);
+		  transform: rotate(90deg);
+		}
+		.vertical-text.tabs-left>li {
+		  -webkit-transform: rotate(-90deg);
+		  -moz-transform: rotate(-90deg);
+		  -ms-transform: rotate(-90deg);
+		  -o-transform: rotate(-90deg);
+		  transform: rotate(-90deg);
+		}
+	</style>
+
+    <nav aria-label="breadcrumb" role="navigation">
+	  <ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="/view_test/{{testid}}">Test Home</a></li>
+	    <li class="breadcrumb-item active"><a href="/attempt_test/{{testid}}">Questions</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">{{question.id}}</li>
+	  </ol>
+	</nav>
+    <!-- <div class="row">
+    	<h2>{{question.name}}</h2>
+    </div>
+    <hr class="row"> -->
+    <div class="row">
+    	<div class="col-md-9">
+    		<div class="card card-outline-success mb-3">
+		  		<div class="card-block" style="padding: 10px;">
+		  			<div class="row">
+		  				<div class="col-md-12 text-left">
+		  					<h2>{{question.id}}</h2>
+		  				</div>
+		  			</div>
+		  			<div class="row text-left">
+		  				<div class="col-md-2"><br>Difficulty: Hard</div>
+		  				<div class="col-md-2"><br>Marks: {{question.marks}}</div>
+		  				<div class="col-md-4"></div>
+		  				<div class="col-md-4 text-right">
+		  					<!-- <button class="btn btn-success">Attempt Question</button> -->
+		  				</div>
+		  			</div>
+		  		</div>
+		  	</div>
+		  	<div class="card card-outline-info mb-3" style="padding:20px">
+			  <div class="card-block">
+			    <blockquote class="card-blockquote">
+			      <h4>Problem Statement</h4><hr>
+			      <p class="statement"></p>
+			    </blockquote>
+			  </div>
+			</div>
+			<div class="card card-outline-info mb-3" style="padding:20px">
+			  <div class="card-block">
+			    <blockquote class="card-blockquote">
+			      <h4>Input Format</h4><hr>
+			      <p class="inputformat"></p>
+			    </blockquote>
+			  </div>
+			</div>
+			<div class="card card-outline-info mb-3" style="padding:20px">
+			  <div class="card-block">
+			    <blockquote class="card-blockquote">
+			      <h4>Output Format</h4><hr>
+			      <p class="outputfprmat"></p>
+			    </blockquote>
+			  </div>
+			</div>
+			<div class="card card-outline-info mb-3" style="padding:20px">
+			  <div class="card-block">
+			    <blockquote class="card-blockquote">
+			      <h4>Constraints</h4><hr>
+			      <p class="constraints"></p>
+			    </blockquote>
+			  </div>
+			</div>
+			<div class="card card-outline-info mb-3" style="padding:20px">
+			  <div class="card-block">
+			    <blockquote class="card-blockquote">
+			      <h4>Code Editor</h4><hr>
+			      <div class="codeeditor">
+					<form id="form_code" action="/submitcode/{{testid}}/{{question.id}}" method="POST">
+					  	<div id="status"></div>
+					  	<div id="code_{{question.id}}" style="height: 450px;"></div>
+					  	<textarea name="code_{{question.id}}" style="display: none;"></textarea><br>
+						<div class="row">
+							  <div class="col-md-6">
+							  	<button type="submit" id="testrun" name ="action" value="Test Run" class="btn btn-default float-left">Test Run</button>
+							  </div>
+							  <div class="col-md-6">
+							  	<button type="submit" name="action" value="Submit Solution" class="btn btn-success float-right">Submit as Solution</button>
+							  </div>
+						</div>
+					</form> 
+			      </div>
+			    </blockquote>
+			  </div>
+			</div>
+			<div class="card card-outline-info mb-3" style="padding:20px">
+			  <div class="card-block">
+			    <blockquote class="card-blockquote">
+			      <h4>Output</h4><hr>
+			      <div class="output">
+						 
+			      </div>
+			    </blockquote>
+			  </div>
+			</div>
+    	</div>
+    	<div class="col-md-3">
+    		<div class="card card-outline-success mb-3 text-center">
+			  <div class="card-block"><br>
+			  	<h5>Your exam ends in: </h5>
+			    <div id="timer" style="display: inline-flex; color: black" class="text-center">
+					<div class="d-inline" style="margin: 5px; padding:5px; padding-left:10px; padding-right:10px; background-color: white">
+						<h3 id="hours">{{hours}}</h3>
+						<h5>hours</h5>
+					</div>
+					<div class="d-inline" style="margin: 5px; padding:5px; padding-left:10px; padding-right:10px; background-color: white">
+						<h3 id="minutes">{{minutes}}</h3>
+						<h5>mins</h5>
+					</div>
+					<div class="d-inline" style="margin: 5px; padding:5px; padding-left:10px; padding-right:10px; background-color: white">
+						<h3 id="seconds">{{seconds}}</h3>
+						<h5>secs</h5>
+					</div>
+				</div>
+			  </div>
+			</div>
+    	</div>
+    </div>
+    <script type="text/javascript">
+			console.log("{{hours}}")
+    	var tabsFn = (function() {
+		  
+		  function init() {
+		    setHeight();
+		  }
+		  
+		  function setHeight() {
+		    var $tabPane = $('.tab-pane'),
+		        tabsHeight = $('.nav-tabs').height();
+		    
+		    $tabPane.css({
+		      height: tabsHeight
+		    });
+		  }
+		    
+		  $(init);
+		})();
+
+		startTimer();
+
+		function startTimer() {
+			var h = document.getElementById('hours').innerHTML;
+			var m = checkMinute(document.getElementById('minutes').innerHTML);
+			var s = checkSecond((document.getElementById('seconds').innerHTML - 1));
+			if(s==59){m=m-1}
+			if(m==59){h=h-1}
+			if(h<0){
+				location.reload()
+			}
+		  
+			document.getElementById('hours').innerHTML = h
+			document.getElementById('minutes').innerHTML = m
+			document.getElementById('seconds').innerHTML = s
+		  	setTimeout(startTimer, 1000);
+		}
+
+		function checkSecond(sec) {
+		  if (sec < 10 && sec >= 0) {sec = "0" + sec};
+		  if (sec < 0) {sec = "59"};
+		  return sec;
+		}
+		function checkMinute(min) {
+		  if (min < 0) {min = "59"};
+		  return min;
+		}
+		// function checkHour(hour) {
+		//   if (hour < 0) {hour = "24"};
+		//   return hour;
+		// }
+    </script>
+    <script type="text/javascript">
+		$.get("/get_statement/{{testid}}/{{question.id}}",function(data){
+			console.log(data)
+			$(".statement").html(data)
+		})
+		$.get("/get_input_format/{{testid}}/{{question.id}}",function(data){
+			console.log(data)
+			$(".inputformat").html(data)
+		})
+		$.get("/get_output_format/{{testid}}/{{question.id}}",function(data){
+			console.log(data)
+			$(".outputformat").html(data)
+		})
+		$.get("/get_constraints/{{testid}}/{{question.id}}",function(data){
+			console.log(data)
+			$(".constraints").html(data)
+		})
+	  
+	  	var editor = ace.edit("code_{{question.id}}");
+		editor.setTheme("ace/theme/monokai");
+		editor.getSession().setMode("ace/mode/python");
+		$.get("/getcode/{{testid}}/{{question.id}}",function(data){
+			console.log(data)
+			editor.getSession().setValue(data)
+		})
+		editor.setOptions({
+			fontSize: "12pt"
+		})
+		var textarea = $('textarea[name="code_{{question.id}}"]');
+		textarea.val(editor.getSession().getValue());
+		editor.getSession().on("change", function () {
+		    textarea.val(editor.getSession().getValue());
+		    console.log(textarea.val())
+		});
+
+		var form = document.getElementById('form_code');
+		form.onsubmit = function() {
+		    form.target = '_self';
+		};
+
+		document.getElementById('testrun').onclick = function() {
+		    form.target = '_blank';
+		    form.submit();
+		}
+
+		$.get("/getoutput/{{testid}}/{{question.id}}",function(data){
+			output = JSON.parse(data);
+			if(output[0]['error']){
+				console.log(output)
+				$(".output").append('<pre>Traceback:\n'+output[0]['error']+'</pre>');
+			}
+			else{
+				for(var i=0; i<output.length; i++){
+					testcase = output[i]['output']
+					console.log(Object.keys(testcase));
+					if(testcase.status=="pass"){
+						$(".output").append('<div class="col-md-3">');
+						$(".output").append('<h5 style="color: green">Testcase '+testcase.status+'ed</h5>');
+					}
+					else{
+						$(".output").append('<h5 style="color: red">Testcase '+testcase.status+'ed</h5>');
+						$(".output").append('<p>Input Passed : '+testcase.input+'<br>Expected : '+testcase.expected+'<br>Your Output : '+testcase.actual+'</p>');
+					}
+				}
+			}
+			// $(".constraints").html(data)
+		})
+		// var error = "{{ error }}"
+		// var output = "{{ request.args.getlist('output') }}"
+		// console.log(output)
+		// if(error){
+		// 	// error = "{{ request.args.get('error') }}"
+		// 	console.log(typeof(error))
+		// 	console.log(error)
+		// 	console.log(output)
+		// }
+		// else if(output){
+		// 	console.log(typeof(output))
+		// 	console.log(error)
+		// 	console.log(output)
+		// 	// output = "{{ request.args.get('output') }}"
+		// 	// for(var i=0; i<output.length; i++){
+		// 	// 	$("#output_code").append("<p>"+output[i]+"</p>")	
+		// 	// 	// $("#output_code").append("<p>"+output[i]+"</p>")	
+		// 	// 	// $("#output_code").append("<p>"+output[i].+"</p>")	
+		// 	// }
+		// 	// // $("#output_code").html("{{ request.args.get('output') }}")
+		// }
+	</script>
+{% endblock%}

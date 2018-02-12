@@ -91,7 +91,7 @@
 
     <nav aria-label="breadcrumb" role="navigation">
 	  <ol class="breadcrumb">
-	    <li class="breadcrumb-item"><a href="/view_test/{{identity}}">Instructions</a></li>
+	    <li class="breadcrumb-item"><a href="/view_test/{{identity}}">Test Home</a></li>
 	    <li class="breadcrumb-item active" aria-current="page">Questions</li>
 	  </ol>
 	</nav>
@@ -114,7 +114,7 @@
 			  				<div class="col-md-2"><br>Marks: {{question.marks}}</div>
 			  				<div class="col-md-4"></div>
 			  				<div class="col-md-4 text-right">
-			  					<button class="btn btn-success">Attempt Question</button>
+			  					<a href="/attempt_question/{{identity}}/{{question.id}}" class="btn btn-success">Attempt Question</a>
 			  				</div>
 			  			</div>
 			  		</div>
@@ -165,12 +165,13 @@
 		startTimer();
 
 		function startTimer() {
-			var h = checkHour(document.getElementById('hours').innerHTML);
+			// var h = checkHour(document.getElementById('hours').innerHTML);
+			var h = document.getElementById('hours').innerHTML;
 			var m = checkMinute(document.getElementById('minutes').innerHTML);
 			var s = checkSecond((document.getElementById('seconds').innerHTML - 1));
 			if(s==59){m=m-1}
 			if(m==59){h=h-1}
-			if(m<0){
+			if(h<0){
 				location.reload()
 			}
 		  

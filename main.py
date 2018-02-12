@@ -179,7 +179,7 @@ def enrolled(f):
         else:
             if not enrolled.attempted:
                 enrolled.attempted = True
-                endtime = datetime.now(IST) + timedelta(minutes=minutes)
+                endtime = datetime.now(IST) + timedelta(hours=hours,minutes=minutes)
                 enrolled.endtime = endtime
                 db.session.commit()
             else:
@@ -477,6 +477,9 @@ def check_timeleft(big,small):
     h = delta.seconds//3600
     m = (delta.seconds//60)%60
     s = delta.seconds%60
+    app.logger.info(big)
+    app.logger.info(small)
+    app.logger.info(delta)
     return h,m,s
 
 @app.route('/attempt_test/<testid>', methods=['GET'])
@@ -531,6 +534,47 @@ def edit_question(testid=None, qid=None, message=None, valid=False):
             return render_template("edit_question.html", identity=question.identity, testid=question.testid, name=question.name, statement=question.statement, input_format=question.input_format, output_format=question.output_format, constraints=question.constraints, marks=question.marks, message=message, valid=valid)
         else:   
             return redirect(url_for("create_question", testid=testid))
+
+@app.route('/attempt_question/<testid>/<qid>', methods=['GET'])
+@login_required
+@enrolled
+def attempt_question(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested attempt_question without TestID: "+str(e))
+        return redirect(url_for('index'))
+    if qid == None:
+        app.logger.info("requested attempt_question without QuestionID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        test = Test.query.filter(Test.identity==testid).first()
+        enrolled = Enrollments.query.filter(Enrollments.testid==testid, Enrollments.email==session['email']).first()
+        question = Question.query.filter(Question.testid==testid, Question.identity==qid).first()
+        q = {}
+        q['id'] = question.identity
+        q['name'] = question.name
+        q['marks'] = question.marks
+        q['statement'] = question.statement
+        q['input_format'] = question.input_format
+        q['output_format'] = question.output_format
+        q['constraints'] = question.constraints
+
+        if test and enrolled:
+            now = datetime.now()
+            if now >= test.start:
+                duration = test.duration
+                endtime = enrolled.endtime
+                h,m,s = check_timeleft(endtime,now)
+                return render_template("attempt_question.html", testid=test.identity, question=q, hours=h, minutes=m, seconds=s, output=request.args.get('output'), error=request.args.get('error'))
+            else:
+                show_timer = True
+                td = test.start-now
+                d = td.days, 
+                h = td.seconds//3600
+                m = (td.seconds//60)%60
+                s = 00
+                return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, message=message, valid=valid, d=d, h=h, m=m, s=s))
+        else:   
+            return redirect(url_for("error"))
 
 @app.route('/edit_description/<testid>', methods=['GET', 'POST'])
 @login_required
@@ -664,6 +708,23 @@ def edit_statement(testid=None, qid=None, message=None, valid=False):
         else:   
             return redirect(url_for("create_question"))
 
+@app.route('/get_statement/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+def get_statement(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested get_statement without TestID: "+str(e))
+        return redirect(url_for('index'))
+    if qid == None:
+        app.logger.info("requested get_statement without QustionID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        question = Question.query.filter(Question.identity==qid, Question.testid==testid).first()
+        if question:
+            if request.method == 'GET':
+                return question.statement
+        else:   
+            return ""
+
 @app.route('/edit_input_format/<testid>/<qid>', methods=['GET', 'POST'])
 @login_required
 @admin_login_required
@@ -690,6 +751,23 @@ def edit_input_format(testid=None, qid=None, message=None, valid=False):
                 return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
         else:   
             return redirect(url_for("create_question"))
+
+@app.route('/get_input_format/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+def get_input_format(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested get_input_format without TestID: "+str(e))
+        return redirect(url_for('index'))
+    if qid == None:
+        app.logger.info("requested get_input_format without QustionID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        question = Question.query.filter(Question.identity==qid, Question.testid==testid).first()
+        if question:
+            if request.method == 'GET':
+                return question.input_format
+        else:   
+            return ""
 
 @app.route('/edit_output_format/<testid>/<qid>', methods=['GET', 'POST'])
 @login_required
@@ -718,6 +796,23 @@ def edit_output_format(testid=None, qid=None, message=None, valid=False):
         else:   
             return redirect(url_for("create_question"))
 
+@app.route('/get_output_format/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+def get_output_format(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested get_output_format without TestID: "+str(e))
+        return redirect(url_for('index'))
+    if qid == None:
+        app.logger.info("requested get_output_format without QustionID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        question = Question.query.filter(Question.identity==qid, Question.testid==testid).first()
+        if question:
+            if request.method == 'GET':
+                return question.output_format
+        else:   
+            return ""
+
 @app.route('/edit_constraints/<testid>/<qid>', methods=['GET', 'POST'])
 @login_required
 @admin_login_required
@@ -744,6 +839,23 @@ def edit_constraints(testid=None, qid=None, message=None, valid=False):
                 return redirect(url_for("edit_question", testid=question.testid , qid=question.identity))
         else:   
             return redirect(url_for("create_question"))
+
+@app.route('/get_constraints/<testid>/<qid>', methods=['GET', 'POST'])
+@login_required
+def get_constraints(testid=None, qid=None, message=None, valid=False):
+    if testid == None:
+        app.logger.info("requested get_constraints without TestID: "+str(e))
+        return redirect(url_for('index'))
+    if qid == None:
+        app.logger.info("requested get_constraints without QustionID: "+str(e))
+        return redirect(url_for('index'))
+    else:
+        question = Question.query.filter(Question.identity==qid, Question.testid==testid).first()
+        if question:
+            if request.method == 'GET':
+                return question.constraints
+        else:   
+            return ""
 
 @app.route('/get_content', methods=['GET'])
 @login_required
@@ -796,15 +908,32 @@ def evalcode(execution_path,inputs,outputs,timeout):
             expected_output = expected_output.replace('\r','').rstrip()
 
             if your_output == expected_output:
-                out,err = "pass", ""
+                out = {}
+                out['input'] = given_input
+                out['expected'] = expected_output
+                out['actual'] = your_output
+                out['status'] = 'pass'
+                # out,err = "pass", ""
                 # out,err = "Testcase Passed.", ""
             elif err:
-                out,err = your_output,err
+                out = {}
+                out['input'] = given_input
+                out['expected'] = expected_output
+                out['actual'] = your_output
+                out['status'] = 'fail'
+                results[index]['error'] = err
+                # out,err = your_output,err
             else:
-                out,err = "fail","Input: "+given_input+" \nExpected: "+expected_output+" \nYour Output: "+your_output
+                out = {}
+                out['input'] = given_input
+                out['expected'] = expected_output
+                out['actual'] = your_output
+                out['status'] = 'fail'
+                out['error'] = "Outputs Mismatch"
+                # out,err = "fail","Input: "+given_input+" \nExpected: "+expected_output+" \nYour Output: "+your_output
             
             results[index]['output'] = out
-            results[index]['error'] = err
+            # results[index]['error'] = err
 
         return True
     
@@ -827,7 +956,7 @@ def evalcode(execution_path,inputs,outputs,timeout):
             return results,""
         else:
             os.remove(execution_path)
-            return "","Lenghts of Inputs and Outputs is not same."
+            return "","Problem at Admin end. Lenghts of Inputs and Outputs is not same."
 
 @app.route('/getoutput/<testid>/<qid>', methods=['GET'])
 @login_required
@@ -844,9 +973,9 @@ def getoutput(testid=None,qid=None):
             BASE_DIR = os.path.dirname(os.path.abspath(__file__))
             tmp_path = 'submissions/'+session['email']+'/'+testid
             directory = os.path.join(BASE_DIR, tmp_path)
-            
-            if os.path.exists(directory+"/"+qid+".txt"):
-                f = open(directory+"/"+qid+".txt", "r")
+            app.logger.info(directory)
+            if os.path.exists(directory+"/"+qid+"_output.json"):
+                f = open(directory+"/"+qid+"_output.json", "r")
                 content = f.read()
                 app.logger.info("getting output: %s",content)
                 return content
@@ -873,7 +1002,7 @@ def getcode(testid=None,qid=None):
                 f = open(directory+"/"+qid+".py", "r")
                 return f.read()
 
-            return "Could not fetch the code. Try submitting again."
+            return "# Seems like you haven't written any code yet."
 
 @app.route('/gettestcases/<testid>/<qid>', methods=['GET','POST'])
 @login_required
@@ -974,10 +1103,10 @@ def createtestcase(testid=None,qid=None):
 def submitcode(testid=None, qid=None, message=None, valid=False):
     if testid == None:
         app.logger.info("requested submitcode without TestID: "+str(e))
-        return redirect(url_for('admin'))
+        return redirect(url_for('index'))
     if qid == None:
         app.logger.info("requested submitcode without QuestionID: "+str(e))
-        return redirect(url_for('admin'))
+        return redirect(url_for('index'))
     else:
         question = Question.query.filter(Question.identity==qid,Question.testid==testid).first()
         if question:
@@ -1005,7 +1134,6 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                         with open(execution_path, "wb") as f:
                             f.write(code)
                         output,err = evalcode(execution_path, inputs, outputs, 5)
-                        output = json.dumps(output)
                     else:
                         output,err = "","An instance of your previous execution is still running. Please email <vy[at]fju[dot]us>."
                         
@@ -1019,7 +1147,6 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                         with open(execution_path, "wb") as f:
                             f.write(code)
                         output,err = evalcode(execution_path, inputs, outputs, 5)
-                        output = json.dumps(output)
                     else:
                         output,err = "","An instance of your previous execution is still running. Please email <vy[at]fju[dot]us>."
                     
@@ -1031,9 +1158,17 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                     if output == "":
                         f.write(err)
                     else:
-                        f.write(output)
+                        f.write(json.dumps(output))
                 
-                return redirect(url_for("edit_question", testid=question.testid , qid=question.identity, error=err, output=output, show_editor=True))
+                # op = {}
+                # op.output = output
+                # op.error = err
+                # return op
+                # request.args['output'] = output
+                if 'edit_question' in request.referrer:
+                    return redirect(url_for("edit_question", testid=question.testid , qid=question.identity, show_editor=True))
+                else:
+                    return redirect(url_for("attempt_question", testid=question.testid , qid=question.identity))
         else:   
             return redirect(url_for("create_question"))
 
