@@ -110,6 +110,15 @@ class Question(db.Model):
     marks = db.Column(db.Integer)
     languages = db.Column(db.Text, default="Python")
 
+class Result(db.Model):
+    __tablename__ = "result"
+    id = db.Column(db.Integer, primary_key=True)
+    qid = db.Column(db.Text)
+    testid = db.Column(db.Text)
+    email = db.Column(db.String(100), nullable=False)
+    marks = db.Column(db.Integer)
+    code_path = db.Column(db.Text)
+
 class Enrollments(db.Model):
     __tablename__ = "enrollments"
     id = db.Column(db.Integer, primary_key=True)
@@ -1097,6 +1106,29 @@ def createtestcase(testid=None,qid=None):
 
             return redirect(url_for("edit_question", testid=testid , qid=qid, show_testcases=True))
 
+def calculate_score(outputs,maxmarks):
+    score_for_each_tc = maxmarks/len(outputs)
+    score = 0
+    app.logger.info("Each Mark %s",score_for_each_tc)
+    for output in outputs:
+        app.logger.info("Status %s",output['output']['status'])
+        if output['output']['status'] == "pass":
+            score+=score_for_each_tc
+    return score
+
+def update_score(score,testid,qid,email,code_path):
+    result = Result.query.filter(Result.qid==qid,Result.testid==testid,Result.email==email).first()
+    if result:
+        result.marks = score
+        result.code_path = code_path
+        db.session.add(result)
+    else:
+        result = Result(qid=qid,testid=testid,email=email,marks=score,code_path=code_path)
+        db.session.add(result)
+    
+    db.session.commit()
+    return ""
+
 @app.route('/submitcode/<testid>/<qid>', methods=['POST'])
 @login_required
 @admin_login_required
@@ -1139,6 +1171,9 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                         
                 if request.form["action"] == "Submit Solution":
                     app.logger.info("Submitting Code: %s",code)
+
+                    score = 0
+
                     if not os.path.exists(execution_path):
                         os.makedirs(execution_path)
                     execution_path+="/Solution.py"
@@ -1147,6 +1182,8 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                         with open(execution_path, "wb") as f:
                             f.write(code)
                         output,err = evalcode(execution_path, inputs, outputs, 5)
+                        score = calculate_score(output,question.marks)
+                        update_score(score,testid,qid,session['email'],execution_path)
                     else:
                         output,err = "","An instance of your previous execution is still running. Please email <vy[at]fju[dot]us>."
                     

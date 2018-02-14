@@ -1,97 +1,75 @@
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
-2018-02-12 22:18:20.616049
-2018-02-12 21:23:02.682156
-0:55:17.933893
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
-2018-02-12 22:18:20.616049
-2018-02-12 21:23:29.143263
-0:54:51.472786
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
-2018-02-12 22:18:20.616049
-2018-02-12 21:24:34.519616
-0:53:46.096433
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
-2018-02-12 22:18:20.616049
-2018-02-12 21:24:57.996990
-0:53:22.619059
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
-2018-02-12 22:18:20.616049
-2018-02-12 21:25:11.961017
-0:53:08.655032
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
-2018-02-12 22:18:20.616049
-2018-02-12 21:25:34.813493
-0:52:45.802556
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
-2018-02-12 22:18:20.616049
-2018-02-12 21:26:25.076866
-0:51:55.539183
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo", "error": "Outputs Mismatch"}}]
-Test Running Code: # Seems like you haven't written any code yet.
-print "helo"*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-2018-02-12 22:18:20.616049
-2018-02-12 21:26:36.748548
-0:51:43.867501
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helohelohelohelohelo", "error": "Outputs Mismatch"}}]
-Test Running Code: # Seems like you haven't written any code yet.
-print "helo "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-2018-02-12 22:18:20.616049
-2018-02-12 21:26:59.827384
-0:51:20.788665
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "helo helo helo helo helo", "error": "Outputs Mismatch"}}]
-Test Running Code: # Seems like you haven't written any code yet.
-print "hello "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-2018-02-12 22:18:20.616049
-2018-02-12 21:27:21.137459
-0:50:59.478590
+seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-14 19:17:32.989360
+seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-14 19:17:32.998854
+2018-02-14 20:27:49.623544
+2018-02-14 19:17:40.420432
+1:10:09.203112
 /home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
 getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-2018-02-12 22:18:20.616049
-2018-02-12 21:27:46.278777
-0:50:34.337272
-[(u'vedavyas.yeleswarapu@gmail.com',)]
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-12 21:32:08.701133
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-12 21:32:08.720500
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-12 21:32:08.745783
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-12 21:32:08.765022
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-12 21:32:08.776698
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-12 21:32:08.786679
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-question statement
-Test Running Code: # Seems like you haven't written any code yet.
-print "hello "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-question statement
 Submitting Code: # Seems like you haven't written any code yet.
 print "hello "*5
 cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+Submitting Code: # Seems like you haven't written any code yet.
+print "hello "*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+Submitting Code: # Seems like you haven't written any code yet.
+print "hello "*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+2018-02-14 20:27:49.623544
+2018-02-14 19:18:37.313234
+1:09:12.310310
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-14 19:18:37.482709
+seeking for richtexteditor.js from 127.0.0.1 at 2018-02-14 19:18:37.502358
+seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-14 19:18:37.520385
+seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-14 19:18:37.535371
+seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-14 19:18:37.551698
+seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-14 19:18:37.561085
 /home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
 getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-question statement
-Test Running Code: # Seems like you haven't written any code yet.
-print "hello "*6
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+2018-02-14 20:27:49.623544
+2018-02-14 19:20:47.110304
+1:07:02.513240
 /home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "hello hello hello hello hello hello", "error": "Outputs Mismatch"}}]
-question statement
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
 Submitting Code: # Seems like you haven't written any code yet.
-print "hello "*6
+print "hello "*5
 cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+Max Marks 10
+Status pass
+2018-02-14 20:27:49.623544
+2018-02-14 19:20:52.988547
+1:06:56.634997
 /home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "fail", "actual": "hello hello hello hello hello hello", "error": "Outputs Mismatch"}}]
-question statement
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+2018-02-14 20:27:49.623544
+2018-02-14 19:21:39.805433
+1:06:09.818111
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+Submitting Code: # Seems like you haven't written any code yet.
+print "hello "*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+Each Mark 0
+Status pass
+2018-02-14 20:27:49.623544
+2018-02-14 19:21:42.660247
+1:06:06.963297
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+Submitting Code: # Seems like you haven't written any code yet.
+print "hello "*5
+cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
+Each Mark 10
+Status pass
+2018-02-14 20:27:49.623544
+2018-02-14 19:22:32.639940
+1:05:16.983604
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+2018-02-14 20:27:49.623544
+2018-02-14 19:23:30.196073
+1:04:19.427471
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
+getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
+2018-02-14 20:27:49.623544
+2018-02-14 19:23:36.334329
+1:04:13.289215
