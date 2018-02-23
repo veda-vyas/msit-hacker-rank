@@ -24,6 +24,7 @@ from werkzeug.utils import secure_filename
 import zipfile
 from sqlalchemy import cast, Date, extract
 from functools import wraps
+import io
 # from seccomp import SecureEvalHost
 # import timestring
 
@@ -186,17 +187,16 @@ def enrolled(f):
             s = 00
             return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, d=d, h=h, m=m, s=s, next=request.url))
         else:
+            if enrolled.endtime:
+                if enrolled.endtime < now:
+                    return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, completed=True))
             if not enrolled.attempted:
                 enrolled.attempted = True
                 endtime = datetime.now(IST) + timedelta(hours=hours,minutes=minutes)
                 enrolled.endtime = endtime
                 db.session.commit()
-            else:
-                if enrolled.endtime:
-                    if enrolled.endtime < now:
-                        return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration, completed=True))
-                else:
-                    return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration))
+            # else:
+            #     return redirect(url_for("view_test", testid=test.identity, identity=test.identity, name=test.name, no_of_questions=test.no_of_questions, start=test.start.strftime("%d-%m-%Y %H:%M"), end=test.end.strftime("%d-%m-%Y %H:%M"), duration=test.duration))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -204,7 +204,10 @@ def enrolled(f):
 @login_required
 def index():
     try:
-        return render_template('index.html')
+        if session['email'] not in ADMINS:
+            return render_template('index.html')
+        else:
+            return redirect(url_for('admin'))
     except Exception as e:
         app.logger.info(e)
         return render_template('error.html')
@@ -232,6 +235,24 @@ def load_tests():
                 "<a href='/edit_test/"+test.identity+"'>"+test.identity+"</a>", test.name, test.no_of_questions, test.start.strftime("%d-%m-%Y %H:%M"), test.end.strftime("%d-%m-%Y %H:%M"), test.duration 
             ])
         return json.dumps(tests_arr)
+    except Exception as e:
+        app.logger.info("Error in load_tests: "+str(e))
+        return render_template('error.html')
+
+@app.route('/load_student_tests', methods=['POST'])
+@login_required
+def load_student_tests():
+    try:
+        # tests = Test.query.filter(Test.name=="xyz").all()
+        enrolled_tests = Enrollments.query.filter(Enrollments.email==session['email']).all()
+        for test in enrolled_tests:    
+            tests = Test.query.filter(Test.identity==test.testid).all()
+            tests_arr = []
+            for test in tests:
+                tests_arr.append([
+                    "<a href='/view_test/"+test.identity+"'>"+test.identity+"</a>", test.no_of_questions, test.start.strftime("%d-%m-%Y %H:%M"), test.end.strftime("%d-%m-%Y %H:%M"), test.duration
+                ])
+            return json.dumps(tests_arr)
     except Exception as e:
         app.logger.info("Error in load_tests: "+str(e))
         return render_template('error.html')
@@ -295,7 +316,7 @@ def invite(email=None, testid=None):
                 for i in enrollment:
                     db.session.delete(i)
                 db.session.commit()
-            return redirect(url_for("edit_test", testid=testid))
+            return redirect(url_for('edit_test', testid=testid))
 
     except Exception as e:
         app.logger.info("Error in invite: "+str(e))
@@ -318,6 +339,51 @@ def invite_all(testid=None):
 
     except Exception as e:
         app.logger.info("Error in invite_all: "+str(e))
+        return render_template('error.html')
+
+@app.route('/invitefromcsv', methods=['POST'])
+@login_required
+@admin_login_required
+def invitefromcsv():
+    try:
+        f = request.files['invitelist']
+        testid = request.form['testid']
+        if not f:
+            return "No file"
+
+        stream = io.StringIO(f.stream.read().decode("UTF8"), newline=None)
+        csv_input = csv.reader(stream)
+        failed = []
+        for row in csv_input:
+            email = row[0].split(' ')[0]
+            if re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                invite(email=email,testid=testid)
+            else:
+                failed.append(email)
+
+        return redirect(url_for("edit_test", testid=testid, failed=json.dumps(failed)))
+
+    except Exception as e:
+        app.logger.info("Error in invitefromcsv: "+str(e))
+        return render_template('error.html')
+
+@app.route('/inviteone', methods=['POST'])
+@login_required
+@admin_login_required
+def inviteone():
+    try:
+        testid = request.form['testid']
+        email = request.form['email']
+        failed = []        
+        if re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            invite(email=email,testid=testid)
+        else:
+            failed.append(email)
+
+        return redirect(url_for("edit_test", testid=testid, failed=json.dumps(failed)))
+
+    except Exception as e:
+        app.logger.info("Error in inviteone: "+str(e))
         return render_template('error.html')
 
 @app.route('/load_questions/<testid>', methods=['POST'])
@@ -387,6 +453,9 @@ def create_test(message=None, valid=None):
             app.logger.info("Error in create_test: "+str(e))
             return redirect(url_for("create_test", message=str(e), valid=False))
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() == '.zip'
+
 @app.route('/create_question/<testid>', methods=['GET','POST'])
 @login_required
 @admin_login_required
@@ -406,11 +475,29 @@ def create_question(testid=None, message=None, valid=None):
                 f = request.form
                 name = f["name"]
                 id = f["name"]
+                file = request.files['testcases']
+                if file.filename == '':
+                    flash('No selected file')
+                    return redirect(request.url)
+                if file:
+                    app.logger.info(file.filename)
+                    filename = secure_filename(file.filename)
+                    directory = os.path.join(root, 'testcases/'+testid+'/'+name)
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+                    tmp_path = os.path.join(directory, filename)
+                    file.save(tmp_path)
+
+                    with zipfile.ZipFile(tmp_path) as zf:
+                        zf.extractall(os.path.join(root, 'testcases/'+testid+'/'+name))
+                        os.remove(tmp_path)
+
                 statement = ""
                 input_format = ""
                 output_format= ""
                 constraints = ""
                 marks = f['marks']
+
                 questions = Question.query.filter(Question.identity==id,Question.testid==testid).all()
                 if len(questions) == 0:
                     new_question = Question(identity=id,testid=testid,name=name,statement=statement,input_format=input_format,output_format=output_format,constraints=constraints,marks=marks)
@@ -504,14 +591,22 @@ def attempt_test(testid=None, message=None, valid=False):
         questions = Question.query.filter(Question.testid==testid).all()
         qarr = []
         for question in questions:
+            result = Result.query.filter(Result.testid==testid,Result.qid==question.identity,Result.email==session['email']).first()
             q = {}
             q['id'] = question.identity
             q['marks'] = question.marks
+            if result:
+                q['marks_secured'] = result.marks
             qarr.append(q)
 
         if test and enrolled:
             now = datetime.now()
             if now >= test.start:
+                if not enrolled.attempted:
+                    enrolled.attempted = True
+                    endtime = datetime.now(IST) + timedelta(hours=hours,minutes=minutes)
+                    enrolled.endtime = endtime
+                    db.session.commit()
                 duration = test.duration
                 endtime = enrolled.endtime
                 h,m,s = check_timeleft(endtime,now)
@@ -880,7 +975,6 @@ def get_content(filename=None):
 
 @app.route('/evalcode', methods=['POST'])
 @login_required
-@admin_login_required
 def evalcode(execution_path,inputs,outputs,timeout):
     code =  get_content(execution_path)
     if code == "":
@@ -969,7 +1063,6 @@ def evalcode(execution_path,inputs,outputs,timeout):
 
 @app.route('/getoutput/<testid>/<qid>', methods=['GET'])
 @login_required
-@admin_login_required
 def getoutput(testid=None,qid=None):
     if testid == None:
         app.logger.info("requested getcode without TestID: "+str(e))
@@ -993,7 +1086,6 @@ def getoutput(testid=None,qid=None):
 
 @app.route('/getcode/<testid>/<qid>', methods=['GET'])
 @login_required
-@admin_login_required
 def getcode(testid=None,qid=None):
     if testid == None:
         app.logger.info("requested getcode without TestID: "+str(e))
@@ -1015,7 +1107,6 @@ def getcode(testid=None,qid=None):
 
 @app.route('/gettestcases/<testid>/<qid>', methods=['GET','POST'])
 @login_required
-@admin_login_required
 def gettestcases(testid=None,qid=None):
     if testid == None:
         app.logger.info("requested gettestcases without TestID: "+str(e))
@@ -1107,13 +1198,16 @@ def createtestcase(testid=None,qid=None):
             return redirect(url_for("edit_question", testid=testid , qid=qid, show_testcases=True))
 
 def calculate_score(outputs,maxmarks):
-    score_for_each_tc = maxmarks/len(outputs)
     score = 0
-    app.logger.info("Each Mark %s",score_for_each_tc)
-    for output in outputs:
-        app.logger.info("Status %s",output['output']['status'])
-        if output['output']['status'] == "pass":
-            score+=score_for_each_tc
+    if len(outputs):
+        score_for_each_tc = maxmarks/len(outputs)
+        app.logger.info("Each Mark %s",score_for_each_tc)
+        for output in outputs:
+            app.logger.info("Status %s",output['output']['status'])
+            if output['output']['status'] == "pass":
+                score+=score_for_each_tc
+    else:
+        score = maxmarks
     return score
 
 def update_score(score,testid,qid,email,code_path):
@@ -1131,7 +1225,6 @@ def update_score(score,testid,qid,email,code_path):
 
 @app.route('/submitcode/<testid>/<qid>', methods=['POST'])
 @login_required
-@admin_login_required
 def submitcode(testid=None, qid=None, message=None, valid=False):
     if testid == None:
         app.logger.info("requested submitcode without TestID: "+str(e))

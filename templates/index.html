@@ -1,4 +1,56 @@
 {% extends "base.html" %}
-{% block title %}CSPP - Assignment 1{% endblock %}
+{% block title %}HackerRank - Homepage{% endblock %}
 {% block body %}
+	<style type="text/css">
+		.sub-nav-item {
+			padding: 5px;
+			background-color: white;
+			color: black;
+		}
+		.sub-nav {
+			background-color: #ccc;
+			border: 1px solid #929eaa;
+		}
+		#content {
+			padding: 10px;
+			border: 1px solid #929eaa;
+		}
+		.btn {
+			border-radius: 0px !important;
+		}
+		.tests_ul {
+			list-style-type: none;
+		}
+		.tests_ul li {
+			list-style-type: none;
+		}
+	</style>
+
+	<h2>Your Exams list</h2><br>
+	<div id="content">
+		<table id="tests" class="display" width="100%"></table>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var jqxhr = $.post( "/load_student_tests", function(res) {
+				tests = JSON.parse(res)
+			    $('#tests').DataTable( {
+			        data: tests,
+			        columns: [
+			            { title: "Exam Name" },
+			            { title: "No. of Questions" },
+			            { title: "Starts on" },
+			            { title: "Ends by" },
+			            { title: "Duration of Exam (in mins)" }
+			        ],
+					retrieve: true,
+			        paging: false
+			    });
+			})
+			.fail(function() {
+				$("#content").html( "<p class='float-center'>Seems like you were invited to any exams yet.</p>");
+			})
+		});
+	</script>
 {% endblock%}

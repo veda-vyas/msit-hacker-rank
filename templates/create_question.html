@@ -75,12 +75,7 @@
 	<h2 class="row">Create Question</h2><br>
 	<div class="row">
 		
-		<form action="/create_question/{{testid}}" method="POST" class="col-md-6">
-			<!-- <div class="form-group">
-				<label for="id">Question ID</label>
-				<input type="text" class="form-control" id="id" name="id" placeholder="Enter Question ID" required>
-				<small class="form-text text-muted">Please choose a unique ID with not more than 10 characters.</small>
-			</div> -->
+		<form action="/create_question/{{testid}}" method="POST" type="" class="col-md-6" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="name">Name of the Question</label>
 				<input type="text" class="form-control" id="name" name="name" placeholder="Enter name of the Question" required>
@@ -89,6 +84,11 @@
 				<label for="marks">Marks</label>
 				<input type="number" class="form-control" id="marks" name="marks" placeholder="Enter marks for question" required>
 			</div>
+      <div class="form-group">
+        <label for="testcases">Upload Testcases</label>
+        <input type="file" class="form-control-file" id="testcases" name="testcases">
+        <small id="help" class="form-text text-muted">Upload a .zip with input and output files.</small>
+      </div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 	</div>

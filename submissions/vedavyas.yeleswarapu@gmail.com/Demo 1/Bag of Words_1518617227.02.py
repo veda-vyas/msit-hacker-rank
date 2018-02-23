@@ -1,2 +1,2 @@
 # Seems like you haven't written any code yet.
-print "hello "
+print "hello"

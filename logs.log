@@ -1,75 +1,102 @@
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-14 19:17:32.989360
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-14 19:17:32.998854
-2018-02-14 20:27:49.623544
-2018-02-14 19:17:40.420432
-1:10:09.203112
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-Submitting Code: # Seems like you haven't written any code yet.
-print "hello "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-Submitting Code: # Seems like you haven't written any code yet.
-print "hello "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-Submitting Code: # Seems like you haven't written any code yet.
-print "hello "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-2018-02-14 20:27:49.623544
-2018-02-14 19:18:37.313234
-1:09:12.310310
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-14 19:18:37.482709
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-14 19:18:37.502358
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-14 19:18:37.520385
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-14 19:18:37.535371
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-14 19:18:37.551698
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-14 19:18:37.561085
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-2018-02-14 20:27:49.623544
-2018-02-14 19:20:47.110304
-1:07:02.513240
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-Submitting Code: # Seems like you haven't written any code yet.
-print "hello "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-Max Marks 10
-Status pass
-2018-02-14 20:27:49.623544
-2018-02-14 19:20:52.988547
-1:06:56.634997
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-2018-02-14 20:27:49.623544
-2018-02-14 19:21:39.805433
-1:06:09.818111
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-Submitting Code: # Seems like you haven't written any code yet.
-print "hello "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-Each Mark 0
-Status pass
-2018-02-14 20:27:49.623544
-2018-02-14 19:21:42.660247
-1:06:06.963297
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-Submitting Code: # Seems like you haven't written any code yet.
-print "hello "*5
-cmd is: ['sandbox/bin/run', 'python', u'vedavyas.yeleswarapu@gmail.com/Solution.py']
-Each Mark 10
-Status pass
-2018-02-14 20:27:49.623544
-2018-02-14 19:22:32.639940
-1:05:16.983604
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-2018-02-14 20:27:49.623544
-2018-02-14 19:23:30.196073
-1:04:19.427471
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/Demo 1
-getting output: [{"output": {"expected": "hello hello hello hello hello", "input": "hello", "status": "pass", "actual": "hello hello hello hello hello"}}]
-2018-02-14 20:27:49.623544
-2018-02-14 19:23:36.334329
-1:04:13.289215
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+vedavyas.yeleswarapu@gmail.com
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-21 19:27:16.374509
+seeking for richtexteditor.js from 127.0.0.1 at 2018-02-21 19:27:16.397972
+seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-21 19:27:16.415358
+seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-21 19:27:16.432673
+seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-21 19:27:16.448280
+seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-21 19:27:16.458295
+[(u'vy@fju.us',)]
+/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "hell", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "hell", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "pass", "actual": "hell"}}]
+question statement
+vy@fju.us
+seeking for coffee.png from 127.0.0.1 at 2018-02-21 19:29:07.999255
+2018-02-21 20:59:23.514982
+2018-02-21 19:29:10.182659
+1:30:13.332323
+2018-02-21 20:59:23.514982
+2018-02-21 19:29:12.190465
+1:30:11.324517
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+2018-02-21 20:59:23.514982
+2018-02-21 19:29:16.174131
+1:30:07.340851
+2018-02-21 20:59:23.514982
+2018-02-21 19:29:17.673267
+1:30:05.841715
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+2018-02-21 20:59:23.514982
+2018-02-21 19:35:49.074060
+1:23:34.440922
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-21 19:35:49.201080
+seeking for richtexteditor.js from 127.0.0.1 at 2018-02-21 19:35:49.282413
+seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-21 19:35:49.336780
+seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-21 19:35:49.380960
+seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-21 19:35:49.431246
+seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-21 19:35:49.441921
+2018-02-21 20:59:23.514982
+2018-02-21 19:36:00.263925
+1:23:23.251057
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+Test Running Code: print "Hello"
+cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
+cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
+cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
+2018-02-21 20:59:23.514982
+2018-02-21 19:36:24.933441
+1:22:58.581541
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+2018-02-21 20:59:23.514982
+2018-02-21 19:37:28.463763
+1:21:55.051219
+2018-02-21 20:59:23.514982
+2018-02-21 19:37:33.142735
+1:21:50.372247
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+Submitting Code: print "Hello"
+cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
+cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
+cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
+Each Mark 33
+Status fail
+Status fail
+Status fail
+2018-02-21 20:59:23.514982
+2018-02-21 19:37:38.932347
+1:21:44.582635
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+2018-02-21 20:59:23.514982
+2018-02-21 19:37:41.531271
+1:21:41.983711
+2018-02-21 20:59:23.514982
+2018-02-21 19:37:43.418074
+1:21:40.096908
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+2018-02-21 20:59:23.514982
+2018-02-21 19:37:50.556895
+1:21:32.958087
+2018-02-21 20:59:23.514982
+2018-02-21 19:37:52.738562
+1:21:30.776420
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+2018-02-21 20:59:23.514982
+2018-02-21 19:42:05.801731
+1:17:17.713251
+/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-21 21:19:32.903254
+seeking for richtexteditor.js from 127.0.0.1 at 2018-02-21 21:19:32.962429
+seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-21 21:19:33.087670
+seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-21 21:19:33.113588
+seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-21 21:19:33.137079
+seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-21 21:19:33.150361
+seeking for coffee.png from 127.0.0.1 at 2018-02-21 21:19:33.554153

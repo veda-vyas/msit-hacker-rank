@@ -89,24 +89,31 @@
 		}
 	</style>
 
-    <nav aria-label="breadcrumb" role="navigation">
-	  <ol class="breadcrumb">
-	    <li class="breadcrumb-item"><a href="/view_test/{{identity}}">Test Home</a></li>
-	    <li class="breadcrumb-item active" aria-current="page">Questions</li>
-	  </ol>
-	</nav>
     <div class="row">
     	<h2>{{name}}</h2>
     </div>
     <hr class="row">
     <div class="row">
     	<div class="col-md-9">
+		    <nav aria-label="breadcrumb" role="navigation">
+			  <ol class="breadcrumb">
+			    <li class="breadcrumb-item"><a href="/view_test/{{identity}}">Test Home</a></li>
+			    <li class="breadcrumb-item active" aria-current="page">Questions</li>
+			  </ol>
+			</nav>
         	{% for question in questions %}
         		<div class="card card-outline-success mb-3">
 			  		<div class="card-block" style="padding: 10px;">
 			  			<div class="row">
 			  				<div class="col-md-12 text-left">
-			  					<h4><i class="fa fa-close mx-3" aria-hidden="true" style="color: red"></i>{{question.id}}</h4>
+			  					<h4>
+			  						{% if question.marks_secured %}
+			  							<i class="fa fa-check mx-3" aria-hidden="true" style="color: green"></i>
+			  						{% else %}
+			  							<i class="fa fa-close mx-3" aria-hidden="true" style="color: red"></i>
+			  						{% endif %}
+			  						<a href="/attempt_question/{{identity}}/{{question.id}}">{{question.id}}</a>
+			  					</h4>
 			  				</div>
 			  			</div>
 			  			<div class="row text-left">
@@ -114,7 +121,9 @@
 			  				<div class="col-md-2"><br>Marks: {{question.marks}}</div>
 			  				<div class="col-md-4"></div>
 			  				<div class="col-md-4 text-right">
-			  					<a href="/attempt_question/{{identity}}/{{question.id}}" class="btn btn-success">Attempt Question</a>
+			  					{% if question.marks_secured %}
+			  						<button class="btn btn-primary" disabled>Score: {{question.marks_secured}}/{{question.marks}}</button>
+		  						{% endif %}
 			  				</div>
 			  			</div>
 			  		</div>
@@ -122,7 +131,7 @@
     		{% endfor %}
     	</div>
     	<div class="col-md-3">
-    		<div class="card card-outline-success mb-3 text-center">
+    		<div class="card card-outline-success mb-3 text-center" style="position: fixed">
 			  <div class="card-block"><br>
 			  	<h5>Your exam ends in: </h5>
 			    <div id="timer" style="display: inline-flex; color: black" class="text-center">

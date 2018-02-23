@@ -121,11 +121,11 @@
 	    <a class="nav-link" id="testcases_trigger" href="#testcases" role="tab" data-toggle="tab">Testcases</a>
 	  </li>
 	  <li class="nav-item">
-	    <a class="nav-link" href="#languages" role="tab" data-toggle="tab">Languages</a>
-	  </li>
-	  <li class="nav-item">
 	    <a class="nav-link" href="#submissions" role="tab" data-toggle="tab">Submissions</a>
 	  </li>
+	  <!-- <li class="nav-item">
+	    <a class="nav-link" href="#languages" role="tab" data-toggle="tab">Languages</a>
+	  </li> -->
 	</ul>
 
 <!-- Tab panes -->
@@ -436,7 +436,7 @@
 		</div>
 		<div class="col-sm-12 col-md-6"><br>
 			<h4>Output</h4><hr>
-			<div class="output"></div>
+			<div class="row output"></div>
 		</div>
   	</div>
   </div>
@@ -491,12 +491,10 @@
 					testcase = output[i]['output']
 					console.log(Object.keys(testcase));
 					if(testcase.status=="pass"){
-						$(".output").append('<div class="col-md-3">');
-						$(".output").append('<h5 style="color: green">Testcase '+testcase.status+'ed</h5>');
+						$(".output").append('<div class="col-md-5" style="border: 1px solid grey; margin:2%; padding:1%"><h5 style="color: green"><span class="fa fa-check"></span> Passed</h5><p>Input Passed : '+testcase.input+'<br>Expected : '+testcase.expected+'<br>Your Output : '+testcase.actual+'</p></div>');
 					}
 					else{
-						$(".output").append('<h5 style="color: red">Testcase '+testcase.status+'ed</h5>');
-						$(".output").append('<p>Input Passed : '+testcase.input+'<br>Expected : '+testcase.expected+'<br>Your Output : '+testcase.actual+'</p>');
+						$(".output").append('<div class="col-md-5" style="border: 1px solid grey; margin:2%; padding:1%"><h5 style="color: red"><span class="fa fa-close"></span> Failed</h5><p>Input Passed : '+testcase.input+'<br>Expected : '+testcase.expected+'<br>Your Output : '+testcase.actual+'</p></div>');
 					}
 				}
 			}
@@ -510,6 +508,7 @@
 
   <!-- Testcases -->
   <div role="tabpanel" class="tab-pane fade" id="testcases"><br>
+  	<h4>Create/Edit Testcases</h4>
   	<button type="button" id="createtestcase" class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal">
 	  Create Testcase
 	</button><br><br>
@@ -542,6 +541,14 @@
 	    </div>
 	  </div>
 	</div>
+	<br><br>
+  	<h4>Upload a .zip of testcases</h4>
+	<form action="/create_question/{{testid}}" method="POST" type="" class="col-md-6" enctype="multipart/form-data">
+  		<div class="form-group">
+        	<input type="file" class="form-control-file" id="testcases" name="testcases">
+        	<small id="help" class="form-text text-muted">Upload a .zip with input and output files.</small>
+    	</div>
+  	</form>
   	<script type="text/javascript">
   		$('#createtestcase').click(function(){
   			$('#myModal').modal('toggle');

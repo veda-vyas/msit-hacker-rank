@@ -1,2 +1,3 @@
 # Seems like you haven't written any code yet.
-print "hello "
+a = raw_input()
+print a

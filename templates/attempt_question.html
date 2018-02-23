@@ -89,19 +89,19 @@
 		}
 	</style>
 
-    <nav aria-label="breadcrumb" role="navigation">
-	  <ol class="breadcrumb">
-	    <li class="breadcrumb-item"><a href="/view_test/{{testid}}">Test Home</a></li>
-	    <li class="breadcrumb-item active"><a href="/attempt_test/{{testid}}">Questions</a></li>
-	    <li class="breadcrumb-item active" aria-current="page">{{question.id}}</li>
-	  </ol>
-	</nav>
     <!-- <div class="row">
     	<h2>{{question.name}}</h2>
     </div>
     <hr class="row"> -->
     <div class="row">
     	<div class="col-md-9">
+		    <nav aria-label="breadcrumb" role="navigation">
+			  <ol class="breadcrumb">
+			    <li class="breadcrumb-item"><a href="/view_test/{{testid}}">Test Home</a></li>
+			    <li class="breadcrumb-item active"><a href="/attempt_test/{{testid}}">Questions</a></li>
+			    <li class="breadcrumb-item active" aria-current="page">{{question.id}}</li>
+			  </ol>
+			</nav>
     		<div class="card card-outline-success mb-3">
 		  		<div class="card-block" style="padding: 10px;">
 		  			<div class="row">
@@ -154,7 +154,23 @@
 			<div class="card card-outline-info mb-3" style="padding:20px">
 			  <div class="card-block">
 			    <blockquote class="card-blockquote">
-			      <h4>Code Editor</h4><hr>
+			      <div class="row">
+			      	<div class="col-md-6">
+			      		<h4>Code Editor</h4>
+			      	</div>
+			      	<div class="col-md-6 text-right">
+			      		<div class="dropdown">
+						  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+						    Python
+						  </button>
+						  <div class="dropdown-menu">
+						    <a class="dropdown-item" href="#">Python</a>
+						    <a class="dropdown-item" href="#">Python</a>
+						  </div>
+						</div>
+			      	</div>
+			      </div>
+			      <hr>
 			      <div class="codeeditor">
 					<form id="form_code" action="/submitcode/{{testid}}/{{question.id}}" method="POST">
 					  	<div id="status"></div>
@@ -177,7 +193,7 @@
 			  <div class="card-block">
 			    <blockquote class="card-blockquote">
 			      <h4>Output</h4><hr>
-			      <div class="output">
+			      <div class="row output">
 						 
 			      </div>
 			    </blockquote>
@@ -185,7 +201,7 @@
 			</div>
     	</div>
     	<div class="col-md-3">
-    		<div class="card card-outline-success mb-3 text-center">
+    		<div class="card card-outline-success mb-3 text-center" style="position: fixed">
 			  <div class="card-block"><br>
 			  	<h5>Your exam ends in: </h5>
 			    <div id="timer" style="display: inline-flex; color: black" class="text-center">
@@ -277,14 +293,14 @@
 		})
 	  
 	  	var editor = ace.edit("code_{{question.id}}");
-		editor.setTheme("ace/theme/monokai");
+		editor.setTheme("ace/theme/textmate");
 		editor.getSession().setMode("ace/mode/python");
 		$.get("/getcode/{{testid}}/{{question.id}}",function(data){
 			console.log(data)
 			editor.getSession().setValue(data)
 		})
 		editor.setOptions({
-			fontSize: "12pt"
+			fontSize: "18pt"
 		})
 		var textarea = $('textarea[name="code_{{question.id}}"]');
 		textarea.val(editor.getSession().getValue());
@@ -314,12 +330,10 @@
 					testcase = output[i]['output']
 					console.log(Object.keys(testcase));
 					if(testcase.status=="pass"){
-						$(".output").append('<div class="col-md-3">');
-						$(".output").append('<h5 style="color: green">Testcase '+testcase.status+'ed</h5>');
+						$(".output").append('<div class="col-md-5" style="border: 1px solid grey; margin:2%; padding:1%"><h5 style="color: green"><span class="fa fa-check"></span> Passed</h5><p>Input Passed : '+testcase.input+'<br>Expected : '+testcase.expected+'<br>Your Output : '+testcase.actual+'</p></div>');
 					}
 					else{
-						$(".output").append('<h5 style="color: red">Testcase '+testcase.status+'ed</h5>');
-						$(".output").append('<p>Input Passed : '+testcase.input+'<br>Expected : '+testcase.expected+'<br>Your Output : '+testcase.actual+'</p>');
+						$(".output").append('<div class="col-md-5" style="border: 1px solid grey; margin:2%; padding:1%"><h5 style="color: red"><span class="fa fa-close"></span> Failed</h5><p>Input Passed : '+testcase.input+'<br>Expected : '+testcase.expected+'<br>Your Output : '+testcase.actual+'</p></div>');
 					}
 				}
 			}
