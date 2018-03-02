@@ -1,2 +1,1 @@
-# Seems like you haven't written any code yet.
-print "hell"
+print "hello"

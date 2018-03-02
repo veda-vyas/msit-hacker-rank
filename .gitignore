@@ -1,1 +1,7 @@
 venv/
+logs.log
+logs.log.1
+ssl.crt
+ssl.key
+submissions/
+testcases/

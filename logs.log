@@ -1,102 +1,67 @@
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-vedavyas.yeleswarapu@gmail.com
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-21 19:27:16.374509
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-21 19:27:16.397972
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-21 19:27:16.415358
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-21 19:27:16.432673
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-21 19:27:16.448280
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-21 19:27:16.458295
-[(u'vy@fju.us',)]
-/home/ryoz/Desktop/HackerRank/submissions/vedavyas.yeleswarapu@gmail.com/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "hell", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "hell", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "pass", "actual": "hell"}}]
-question statement
-vy@fju.us
-seeking for coffee.png from 127.0.0.1 at 2018-02-21 19:29:07.999255
-2018-02-21 20:59:23.514982
-2018-02-21 19:29:10.182659
-1:30:13.332323
-2018-02-21 20:59:23.514982
-2018-02-21 19:29:12.190465
-1:30:11.324517
+seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-03-02 15:51:25.002288
+seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-03-02 15:51:25.011396
+seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-03-02 15:51:25.022870
+seeking for advanced_unwrap.js from 127.0.0.1 at 2018-03-02 15:51:25.033921
 /home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-2018-02-21 20:59:23.514982
-2018-02-21 19:29:16.174131
-1:30:07.340851
-2018-02-21 20:59:23.514982
-2018-02-21 19:29:17.673267
-1:30:05.841715
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "pass", "actual": "hello"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "pass", "actual": "hello"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "hello", "error": "Outputs Mismatch"}}]
+2018-03-02 17:27:10.388632
+2018-03-02 15:51:32.863599
+1:35:37.525033
+2018-03-02 17:27:10.388632
+2018-03-02 15:51:35.341514
+1:35:35.047118
 /home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-2018-02-21 20:59:23.514982
-2018-02-21 19:35:49.074060
-1:23:34.440922
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-21 19:35:49.201080
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-21 19:35:49.282413
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-21 19:35:49.336780
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-21 19:35:49.380960
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-21 19:35:49.431246
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-21 19:35:49.441921
-2018-02-21 20:59:23.514982
-2018-02-21 19:36:00.263925
-1:23:23.251057
-/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-Test Running Code: print "Hello"
-cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
-cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
-cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
-2018-02-21 20:59:23.514982
-2018-02-21 19:36:24.933441
-1:22:58.581541
-/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-2018-02-21 20:59:23.514982
-2018-02-21 19:37:28.463763
-1:21:55.051219
-2018-02-21 20:59:23.514982
-2018-02-21 19:37:33.142735
-1:21:50.372247
-/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-Submitting Code: print "Hello"
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "pass", "actual": "hello"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "pass", "actual": "hello"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "hello", "error": "Outputs Mismatch"}}]
+Submitting Code: print "hello"
 cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
 cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
 cmd is: ['sandbox/bin/run', 'python', u'vy@fju.us/Solution.py']
 Each Mark 33
+Status pass
+Status pass
 Status fail
-Status fail
-Status fail
-2018-02-21 20:59:23.514982
-2018-02-21 19:37:38.932347
-1:21:44.582635
+
+2018-03-02 17:27:10.388632
+2018-03-02 15:51:40.317645
+1:35:30.070987
 /home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-2018-02-21 20:59:23.514982
-2018-02-21 19:37:41.531271
-1:21:41.983711
-2018-02-21 20:59:23.514982
-2018-02-21 19:37:43.418074
-1:21:40.096908
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "pass", "actual": "hello"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "pass", "actual": "hello"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "hello", "error": "Outputs Mismatch"}}]
+2018-03-02 17:27:10.388632
+2018-03-02 15:51:43.803361
+1:35:26.585271
+seeking for coffee.png from 127.0.0.1 at 2018-03-02 15:52:09.770019
+2018-03-02 17:27:10.388632
+2018-03-02 15:52:14.550027
+1:34:55.838605
+2018-03-02 17:27:10.388632
+2018-03-02 15:52:21.463890
+1:34:48.924742
+2018-03-02 17:27:10.388632
+2018-03-02 15:52:23.916695
+1:34:46.471937
 /home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-2018-02-21 20:59:23.514982
-2018-02-21 19:37:50.556895
-1:21:32.958087
-2018-02-21 20:59:23.514982
-2018-02-21 19:37:52.738562
-1:21:30.776420
-/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-2018-02-21 20:59:23.514982
-2018-02-21 19:42:05.801731
-1:17:17.713251
-/home/ryoz/Desktop/HackerRank/submissions/vy@fju.us/New Test
-getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "fail", "actual": "Hello", "error": "Outputs Mismatch"}}]
-seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-02-21 21:19:32.903254
-seeking for richtexteditor.js from 127.0.0.1 at 2018-02-21 21:19:32.962429
-seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-02-21 21:19:33.087670
-seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-02-21 21:19:33.113588
-seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-02-21 21:19:33.137079
-seeking for advanced_unwrap.js from 127.0.0.1 at 2018-02-21 21:19:33.150361
-seeking for coffee.png from 127.0.0.1 at 2018-02-21 21:19:33.554153
+getting output: [{"output": {"expected": "hello", "input": "hello", "status": "fail", "actual": "hell", "error": "Outputs Mismatch"}}, {"output": {"expected": "hello", "input": "hello\n", "status": "fail", "actual": "hell", "error": "Outputs Mismatch"}}, {"output": {"expected": "hell", "input": "hello", "status": "pass", "actual": "hell"}}]
+2018-03-02 17:27:10.388632
+2018-03-02 15:52:28.349211
+1:34:42.039421
+seeking for coffee.png from 127.0.0.1 at 2018-03-02 15:52:31.428399
+2018-03-02 17:27:10.388632
+2018-03-02 15:52:33.562878
+1:34:36.825754
+seeking for coffee.png from 127.0.0.1 at 2018-03-02 15:52:36.951775
+2018-03-02 17:27:10.388632
+2018-03-02 15:52:50.505687
+1:34:19.882945
+seeking for coffee.png from 127.0.0.1 at 2018-03-02 15:52:56.162297
+2018-03-02 17:27:10.388632
+2018-03-02 15:53:15.455910
+1:33:54.932722
+seeking for coffee.png from 127.0.0.1 at 2018-03-02 15:53:37.331342
+vedavyas.yeleswarapu@gmail.com
+seeking for jquery.cookie.min.js from 127.0.0.1 at 2018-03-02 15:53:52.487142
+seeking for richtexteditor.js from 127.0.0.1 at 2018-03-02 15:53:52.499223
+seeking for richtexteditor.all-commands.js from 127.0.0.1 at 2018-03-02 15:53:52.514009
+seeking for richtexteditor.table_editing.js from 127.0.0.1 at 2018-03-02 15:53:52.524775
+seeking for richtexteditor.toolbar.js from 127.0.0.1 at 2018-03-02 15:53:52.533676
+seeking for advanced_unwrap.js from 127.0.0.1 at 2018-03-02 15:53:52.555663
+[(u'vedavyas.yeleswarapu@gmail.com',), (u'vy@fju.us',)]

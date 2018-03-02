@@ -70,7 +70,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 login_manager.session_protection = "strong"
-ADMINS = ['vedavyas.yeleswarapu@gmail.com']
+ADMINS = ['vedavyas.yeleswarapu@gmail.com','sivashankar@msitprogram.net']
 app.jinja_env.globals['datetime'] = datetime
 app.jinja_env.globals['timedelta'] = timedelta
 #from werkzeug.serving import make_ssl_devcert
@@ -405,6 +405,27 @@ def load_questions(testid=None):
             return json.dumps(questions_arr)
         except Exception as e:
             app.logger.info("Error in load_questions: "+str(e))
+            return render_template('error.html')
+
+@app.route('/load_results/<testid>', methods=['POST'])
+@login_required
+@admin_login_required
+def load_results(testid=None):
+    if testid == None:
+        app.logger.info("requested load_results without TestID: "+str(e))
+        return redirect(url_for('admin'))
+    else:
+        try:
+            # tests = Test.query.filter(Test.name=="xyz").all()
+            results = Result.query.filter(Result.testid==testid).all()
+            results_arr = []
+            for result in results:
+                results_arr.append([
+                    result.email, result.qid, result.marks, "<a target='_blank' href='/get_content?filename="+result.code_path+"'>"+result.code_path+"</a>"
+                ])
+            return json.dumps(results_arr)
+        except Exception as e:
+            app.logger.info("Error in load_results: "+str(e))
             return render_template('error.html')
 
 @app.route('/create_test', methods=['GET','POST'])
@@ -1246,8 +1267,10 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
 
                 if not os.path.exists(directory):
                     os.makedirs(directory)
-                with open(directory+"/"+qid+".py", "wb") as f:
-                    f.write(code)
+                with open(directory+"/"+qid+".py", "w+") as f1:
+                    prev_code = f1.read()
+                with open(directory+"/"+qid+".py", "w") as f1:
+                    f1.write(code)
 
                 if request.form["action"] == "Test Run":
                     app.logger.info("Test Running Code: %s",code)
@@ -1276,12 +1299,17 @@ def submitcode(testid=None, qid=None, message=None, valid=False):
                             f.write(code)
                         output,err = evalcode(execution_path, inputs, outputs, 5)
                         score = calculate_score(output,question.marks)
-                        update_score(score,testid,qid,session['email'],execution_path)
+                        update_score(score,testid,qid,session['email'],directory+"/"+qid+".py")
                     else:
                         output,err = "","An instance of your previous execution is still running. Please email <vy[at]fju[dot]us>."
                     
                     ts = time.time()
-                    with open(directory+"/"+qid+"_"+str(ts)+".py", "wb") as f1:
+                    with open(directory+"/"+qid+".py", "r") as f1:
+                        app.logger.info(prev_code)
+                        if code != prev_code:
+                            with open(directory+"/"+qid+"_"+str(ts)+".py", "wb") as f2:
+                                f2.write(prev_code)
+                    with open(directory+"/"+qid+".py", "r+") as f1:
                         f1.write(code)
 
                 with open(directory+"/"+qid+"_output.json", "wb") as f:

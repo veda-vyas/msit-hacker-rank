@@ -119,6 +119,9 @@
 	  <li class="nav-item">
 	    <a class="nav-link" href="#invites" role="tab" data-toggle="tab">Invites</a>
 	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" href="#results" role="tab" data-toggle="tab">Results</a>
+	  </li>
 	</ul>
 
 <!-- Tab panes -->
@@ -436,6 +439,34 @@
 	</script>
   </div>
 
+  <!-- Results -->
+  <div role="tabpanel" class="tab-pane fade" id="results"><br>
+	<div id="content">
+		<table id="results_table" class="display" width="100%"></table>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var jqxhr = $.post( "/load_results/{{identity}}", function(res) {
+				results = JSON.parse(res)
+			    $('#results_table').DataTable( {
+			        data: results,
+			        columns: [
+			            { title: "Student Email" },
+			            { title: "Question Name" },
+			            { title: "Marks" },
+			            { title: "Submitted Solution" }
+			        ],
+					retrieve: true,
+			        paging: false
+			    });
+			})
+			.fail(function() {
+				$("#content").html( "<p class='float-center'>Error in fetching the data.</p>" );
+			})
+		});
+	</script>
+  </div>
 </div>
 <script type="text/javascript">
 	var editors = [];
